@@ -1,0 +1,201 @@
+# .gitignore for .NET (ASP.NET/Core) and React (Node) projects
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+publish/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# MonoDevelop
+*.pidb
+*.userprefs
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# EF Core
+*.dbmdl
+
+# Rider
+*.ide/
+
+# Runtime files
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# Node / React
+node_modules/
+jspm_packages/
+
+# Build / production
+build/
+dist/
+coverage/
+.next/
+out/
+/.parcel-cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files (local secrets)
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+secrets.json
+
+# Lockfiles (do NOT ignore if you intend to commit them)
+# package-lock.json
+# yarn.lock
+
+# Test results
+/coverage/
+jest-test-results.json
+.vitest/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+
+# OS generated
+ehthumbs.db
+desktop.ini
+
+# JetBrains Rider caches
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+.idea/**/shelf
+*.iml
+
+# Optional: local user-specific files
+*.local
+*.localhistory
+```// filepath: c:\_data\Projects\FirstFullStackProject\.gitignore
+# .gitignore for .NET (ASP.NET/Core) and React (Node) projects
+
+# Visual Studio / Rider / VS Code
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+out/
+artifacts/
+publish/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# MonoDevelop
+*.pidb
+*.userprefs
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# EF Core
+*.dbmdl
+
+# Rider
+*.ide/
+
+# Runtime files
+*.exe
+*.dll
+*.pdb
+*.cache
+
+# Node / React
+node_modules/
+jspm_packages/
+
+# Build / production
+build/
+dist/
+coverage/
+.next/
+out/
+/.parcel-cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files (local secrets)
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+secrets.json
+
+# Lockfiles (do NOT ignore if you intend to commit them)
+# package-lock.json
+# yarn.lock
+
+# Test results
+/coverage/
+jest-test-results.json
+.vitest/
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+
+# OS generated
+ehthumbs.db
+desktop.ini
+
+# JetBrains Rider caches
+.idea/
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+.idea/**/shelf
+*.iml
+
+# Optional: local user-specific files
+*.local
+*.localhistory
