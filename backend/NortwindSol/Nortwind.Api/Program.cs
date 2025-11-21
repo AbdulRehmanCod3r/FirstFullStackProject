@@ -6,6 +6,18 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+// Configure CORS to allow development frontend at http://localhost:5173
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowVite",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
+        });
+});
 
 var app = builder.Build();
 
@@ -17,6 +29,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Enable CORS using the named policy
+app.UseCors("AllowVite");
 
 app.UseAuthorization();
 
