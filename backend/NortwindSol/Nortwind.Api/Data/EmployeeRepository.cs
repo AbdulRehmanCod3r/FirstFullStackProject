@@ -10,8 +10,8 @@ namespace Nortwind.Api.Data
 
         public bool AddEmployee(CreateEmployeeDto dto)
         {
-            string insertquery = "INSERT INTO Employees(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,Address, City, Region, PostalCode, Country, HomePhone, Extension,Photo, Notes, ReportsTo, PhotoPath)" +
-                "VALUES(@LastName, @FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Extension,@Photo,@Notes,@ReportsTo,@PhotoPath)";
+            string insertquery = "INSERT INTO Employees(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes, ReportsTo, PhotoPath)" +
+                "VALUES(@LastName, @FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Extension,@Notes,@ReportsTo,@PhotoPath)";
 
             using (SqlConnection con = new SqlConnection(ConnectionString))
             {
@@ -30,7 +30,7 @@ namespace Nortwind.Api.Data
                     cmd.Parameters.AddWithValue("@Country", dto.Country);
                     cmd.Parameters.AddWithValue("@HomePhone", dto.HomePhone);
                     cmd.Parameters.AddWithValue("@Extension", dto.Extension);
-                    cmd.Parameters.Add("@Photo", System.Data.SqlDbType.Image).Value = DBNull.Value;
+                    
                     cmd.Parameters.AddWithValue("@Notes", dto.Notes);
                     cmd.Parameters.AddWithValue("@ReportsTo", DBNull.Value);
                     cmd.Parameters.AddWithValue("@PhotoPath", DBNull.Value);

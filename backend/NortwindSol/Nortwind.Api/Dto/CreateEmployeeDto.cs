@@ -19,7 +19,7 @@ namespace Nortwind.Api.Dto
         public string? Country { get; set; }
         public string? HomePhone { get; set; }
         public string? Extension { get; set; }
-        [JsonIgnore]
+        
         
         public string? Notes { get; set; }
         public int? ReportsTo { get; set; }
