@@ -16,19 +16,20 @@ namespace Nortwind.Api.Data
         // -------------------
         // INSERT
         // -------------------
-        public static int InsertCustomer(Dto.CreateCustomerDto dto)
+        public static string InsertCustomer(CreateCustomerDto dto)
         {
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
             string query = @"
-                INSERT INTO Customers
-                    (CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone)
-                VALUES
-                    (@CustomerID, @CompanyName, @ContactName, @ContactTitle, @Address, @City, @Region, @PostalCode, @Country, @Phone);
-            ";
+        INSERT INTO Customers
+            (CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone)
+        VALUES
+            (@CustomerID, @CompanyName, @ContactName, @ContactTitle, @Address, @City, @Region, @PostalCode, @Country, @Phone);
+    ";
 
             using var cmd = new SqlCommand(query, conn);
+
             cmd.Parameters.Add("@CustomerID", SqlDbType.NChar, 5).Value = dto.CustomerID;
             cmd.Parameters.Add("@CompanyName", SqlDbType.NVarChar, 40).Value = dto.CompanyName;
             cmd.Parameters.Add("@ContactName", SqlDbType.NVarChar, 30).Value = (object?)dto.ContactName ?? DBNull.Value;
@@ -40,13 +41,15 @@ namespace Nortwind.Api.Data
             cmd.Parameters.Add("@Country", SqlDbType.NVarChar, 15).Value = dto.Country;
             cmd.Parameters.Add("@Phone", SqlDbType.NVarChar, 24).Value = (object?)dto.Phone ?? DBNull.Value;
 
-            return cmd.ExecuteNonQuery();
+            int rows = cmd.ExecuteNonQuery();
+            return rows.ToString();
         }
+
 
         // -------------------
         // UPDATE
         // -------------------
-        public static int UpdateCustomer(string id, Dto.UpdateCustomerDto dto)
+        public static int UpdateCustomer(string id, UpdateCustomerDto dto)
         {
             using var conn = new SqlConnection(connectionString);
             conn.Open();
@@ -79,6 +82,11 @@ namespace Nortwind.Api.Data
 
             return cmd.ExecuteNonQuery();
         }
+
+
+        // -------------------
+        // DELETE
+        // -------------------
         public static bool DeleteCustomer(string id, out string errorMessage)
         {
             errorMessage = null;
@@ -124,7 +132,7 @@ namespace Nortwind.Api.Data
         // -------------------
         // GET ALL
         // -------------------
-        public static List<Dto.CustomerListItemDto> GetAllCustomers()
+        public static List<CustomerListItemDto> GetAllCustomers()
         {
             var customers = new List<CustomerListItemDto>();
             using var conn = new SqlConnection(connectionString);

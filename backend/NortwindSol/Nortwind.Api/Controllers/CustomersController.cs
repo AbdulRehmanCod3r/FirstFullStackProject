@@ -3,7 +3,7 @@ using Nortwind.Api.Data;
 using Nortwind.Api.Dto;
 using System.Collections.Generic;
 
-namespace WebApplication1.Controllers
+namespace Nortwind.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
@@ -41,9 +41,9 @@ namespace WebApplication1.Controllers
             if (CustomerRepository.IsExists(model.CustomerID))
                 return Conflict(new { message = "Customer with this ID already exists." });
 
-            int result = CustomerRepository.InsertCustomer(model);
+            string result = CustomerRepository.InsertCustomer(model);
 
-            if (result > 0)
+            if (!string.IsNullOrEmpty(result))
                 return Ok(new { message = "Customer created successfully." });
 
             return BadRequest(new { message = "Insert failed." });
