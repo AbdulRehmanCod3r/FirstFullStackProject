@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
-namespace Nortwind.Api.Data.Model
+namespace Nortwind.Api.Dto
 {
-    public class Employee
+    public class UpdateEmployeeDto
     {
-        public int EmployeeID { get; set; }
         public string? LastName { get; set; }
         public string? FirstName { get; set; }
         public string? Title { get; set; }
@@ -28,6 +22,8 @@ namespace Nortwind.Api.Data.Model
         public string? Notes { get; set; }
         public int? ReportsTo { get; set; }
         public string? PhotoPath { get; set; }
+
+
+
     }
 }
-

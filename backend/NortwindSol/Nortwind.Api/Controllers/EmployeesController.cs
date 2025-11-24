@@ -1,7 +1,7 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Nortwind.Api.Data;
-using Nortwind.Api.Data.Model;
+using Nortwind.Api.Dto;
+
 namespace Nortwind.Api.Controllers
 {
     [ApiController]
@@ -13,36 +13,49 @@ namespace Nortwind.Api.Controllers
         {
             _logger = logger;
         }
+
         [HttpGet(Name = "GetEmployees")]
-        public IEnumerable<Employee> Get()
+        public IEnumerable<EmployeesListItemDto> Get()
         {
             var repo = new EmployeeRepository();
-            return repo.Getemployee();
+            return repo.GetEmployee();
         }
+
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             var repo = new EmployeeRepository();
 
             // First check if customer exists
-            var employees = repo.GetEmployyeById(id);
+            var employees = repo.GetEmployeeById(id);
             if (employees == null)
                 return NotFound("employee not found!");
 
             // Call your delete method
-            bool result = repo.Deleteemployee(id);
+            repo.DeleteEmployee(id);
 
-            if (result)
-                return Ok("Employee deleted successfully!");
-
-            return BadRequest("Failed to delete customer.");
+            return Ok();
         }
-        [HttpPost(Name = "Addemployees")]
-        public IActionResult Create([FromBody] Employee employee)
+
+        [HttpPost(Name = "AddEmployees")]
+        public IActionResult Create([FromBody] CreateEmployeeDto employee)
         {
             var repo = new EmployeeRepository();
 
-            bool result = repo.Addemployee(employee);
+            bool result = repo.AddEmployee(employee);
+
+            if (result)
+                return Ok("Employee created successfully!");
+
+            return BadRequest("Failed to create employee!");
+        }
+
+        [HttpPut("{id}", Name = "UpdateEmployees")]
+        public IActionResult Update(int id, [FromBody] UpdateEmployeeDto employee)
+        {
+            var repo = new EmployeeRepository();
+
+            bool result = repo.UpdateEmployee(id, employee);
 
             if (result)
                 return Ok("Employee created successfully!");
@@ -54,7 +67,7 @@ namespace Nortwind.Api.Controllers
         public IActionResult Get(int id)
         {
             var repo = new EmployeeRepository();
-            var employee = repo.GetEmployyeById(id);
+            var employee = repo.GetEmployeeById(id);
 
             if (employee == null)
                 return NotFound("Employee not found!");

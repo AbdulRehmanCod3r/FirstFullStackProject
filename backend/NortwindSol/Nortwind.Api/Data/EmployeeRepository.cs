@@ -1,35 +1,37 @@
 ﻿
 using Microsoft.Data.SqlClient;
-using Nortwind.Api.Data.Model;
+using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class EmployeeRepository
     {
-        public string Connectionstring = "Data Source=DESKTOP-S08JF63\\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
-        public bool Addemployee(Employee e1)
+        public string ConnectionString = "Data Source=DESKTOP-S08JF63\\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
+
+        public bool AddEmployee(CreateEmployeeDto dto)
         {
             string insertquery = "INSERT INTO Employees(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,Address, City, Region, PostalCode, Country, HomePhone, Extension,Photo, Notes, ReportsTo, PhotoPath)" +
                 "VALUES(@LastName, @FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Extension,@Photo,@Notes,@ReportsTo,@PhotoPath)";
-            using (SqlConnection con = new SqlConnection(Connectionstring))
+
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(insertquery, con))
                 {
-                    cmd.Parameters.AddWithValue("@LastName", e1.LastName);
-                    cmd.Parameters.AddWithValue("@FirstName", e1.FirstName);
-                    cmd.Parameters.AddWithValue("@Title", e1.Title);
-                    cmd.Parameters.AddWithValue("@TitleOfCourtesy", e1.TitleOfCourtesy);
-                    cmd.Parameters.AddWithValue("@BirthDate", e1.BirthDate);
-                    cmd.Parameters.AddWithValue("@HireDate", e1.HireDate);
-                    cmd.Parameters.AddWithValue("@Address", e1.Address);
-                    cmd.Parameters.AddWithValue("@City", e1.City);
-                    cmd.Parameters.AddWithValue("@Region", e1.Region);
-                    cmd.Parameters.AddWithValue("@PostalCode", e1.PostalCode);
-                    cmd.Parameters.AddWithValue("@Country", e1.Country);
-                    cmd.Parameters.AddWithValue("@HomePhone", e1.HomePhone);
-                    cmd.Parameters.AddWithValue("@Extension", e1.Extension);
+                    cmd.Parameters.AddWithValue("@LastName", dto.LastName);
+                    cmd.Parameters.AddWithValue("@FirstName", dto.FirstName);
+                    cmd.Parameters.AddWithValue("@Title", dto.Title);
+                    cmd.Parameters.AddWithValue("@TitleOfCourtesy", dto.TitleOfCourtesy);
+                    cmd.Parameters.AddWithValue("@BirthDate", dto.BirthDate);
+                    cmd.Parameters.AddWithValue("@HireDate", dto.HireDate);
+                    cmd.Parameters.AddWithValue("@Address", dto.Address);
+                    cmd.Parameters.AddWithValue("@City", dto.City);
+                    cmd.Parameters.AddWithValue("@Region", dto.Region);
+                    cmd.Parameters.AddWithValue("@PostalCode", dto.PostalCode);
+                    cmd.Parameters.AddWithValue("@Country", dto.Country);
+                    cmd.Parameters.AddWithValue("@HomePhone", dto.HomePhone);
+                    cmd.Parameters.AddWithValue("@Extension", dto.Extension);
                     cmd.Parameters.Add("@Photo", System.Data.SqlDbType.Image).Value = DBNull.Value;
-                    cmd.Parameters.AddWithValue("@Notes", e1.Notes);
+                    cmd.Parameters.AddWithValue("@Notes", dto.Notes);
                     cmd.Parameters.AddWithValue("@ReportsTo", DBNull.Value);
                     cmd.Parameters.AddWithValue("@PhotoPath", DBNull.Value);
                     con.Open();
@@ -38,10 +40,10 @@ namespace Nortwind.Api.Data
                 }
             }
         }
-        public List<Employee> Getemployee()
+        public List<EmployeesListItemDto> GetEmployee()
         {
-            List<Employee> employees = new List<Employee>();
-            using (SqlConnection con = new SqlConnection(Connectionstring))
+            List<EmployeesListItemDto> employees = new List<EmployeesListItemDto>();
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 string selectquery = "SELECT * FROM Employees";
                 using (SqlCommand cmd = new SqlCommand(selectquery, con))
@@ -50,7 +52,7 @@ namespace Nortwind.Api.Data
                     SqlDataReader dr = cmd.ExecuteReader();
                     while (dr.Read())
                     {
-                        employees.Add(new Employee
+                        employees.Add(new EmployeesListItemDto
                         {
                             EmployeeID = (int)dr["EmployeeID"],
                             LastName = dr["LastName"]?.ToString(),
@@ -76,19 +78,19 @@ namespace Nortwind.Api.Data
                 return employees;
             }
         }
-        public Employee GetEmployyeById(int EmployeeID)
+
+        public EmployeesListItemDto GetEmployeeById(int employeeId)
         {
-            Employee emp = null;
-            using (SqlConnection con = new SqlConnection(Connectionstring))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 string query = "SELECT * FROM Employees WHERE EmployeeID=@EmployeeID";
                 SqlCommand cmd = new SqlCommand(query, con);
-                cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
+                cmd.Parameters.AddWithValue("@EmployeeID", employeeId);
                 con.Open();
                 SqlDataReader dr = cmd.ExecuteReader();
                 if (dr.Read())
                 {
-                    emp = new Employee
+                    return new EmployeesListItemDto
                     {
                         EmployeeID = (int)dr["EmployeeID"],
                         LastName = dr["LastName"]?.ToString(),
@@ -111,74 +113,29 @@ namespace Nortwind.Api.Data
                     };
                 }
             }
-            return emp;
+
+            return null;
         }
-        public bool Deleteemployee(int EmployeeID)
+        public void DeleteEmployee(int EmployeeID)
         {
-            using (SqlConnection con = new SqlConnection(Connectionstring))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 con.Open();
-                SqlTransaction tx = con.BeginTransaction();
+                // 4. Finally delete the employee row
+                string query = @"DELETE FROM Employees 
+                        WHERE EmployeeID = @EmployeeID";
 
-                try
+                using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    // 1. Remove self-reference (Employees who report to this employee)
-                    string q1 = @"UPDATE Employees 
-                          SET ReportsTo = NULL 
-                          WHERE ReportsTo = @EmployeeID";
-
-                    using (SqlCommand cmd = new SqlCommand(q1, con, tx))
-                    {
-                        cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // 2. Delete related EmployeeTerritories rows
-                    string q2 = @"DELETE FROM EmployeeTerritories 
-                          WHERE EmployeeID = @EmployeeID";
-
-                    using (SqlCommand cmd = new SqlCommand(q2, con, tx))
-                    {
-                        cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // 3. Nullify Orders assigned to this employee
-                    string q3 = @"UPDATE Orders 
-                          SET EmployeeID = NULL 
-                          WHERE EmployeeID = @EmployeeID";
-
-                    using (SqlCommand cmd = new SqlCommand(q3, con, tx))
-                    {
-                        cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // 4. Finally delete the employee row
-                    string q4 = @"DELETE FROM Employees 
-                          WHERE EmployeeID = @EmployeeID";
-
-                    using (SqlCommand cmd = new SqlCommand(q4, con, tx))
-                    {
-                        cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
-                        cmd.ExecuteNonQuery();
-                    }
-
-                    // Commit if everything succeeded
-                    tx.Commit();
-                    return true;
-                }
-                catch
-                {
-                    // Rollback if any error occurs
-                    tx.Rollback();
-                    return false;
+                    cmd.Parameters.AddWithValue("@EmployeeID", EmployeeID);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }
-        public bool Updateemployee(Employee employee)
+
+        public bool UpdateEmployee(int id, UpdateEmployeeDto employee)
         {
-            using (SqlConnection con = new SqlConnection(Connectionstring))
+            using (SqlConnection con = new SqlConnection(ConnectionString))
             {
                 string query =
     "UPDATE Employees SET " +
@@ -217,7 +174,7 @@ namespace Nortwind.Api.Data
                 cmd.Parameters.AddWithValue("@Notes", employee.Notes);
                 cmd.Parameters.AddWithValue("@ReportsTo", employee.ReportsTo);
                 cmd.Parameters.AddWithValue("@PhotoPath", employee.PhotoPath);
-                cmd.Parameters.AddWithValue("@EmployeeID", employee.EmployeeID);
+                cmd.Parameters.AddWithValue("@EmployeeID", id);
                 con.Open();
                 return cmd.ExecuteNonQuery() > 0;
             }
