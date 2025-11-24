@@ -1,97 +1,31 @@
 ﻿using Microsoft.Data.SqlClient;
-using System;
-using System.Collections.Generic;
+using Nortwind.Api.Dto;
 using System.Data;
 
 namespace Nortwind.Api.Data
 {
-    // ===================
-    // DTO CLASSES
-    // ===================
-    public class CreateCustomerDto
-    {
-        public string CustomerID { get; set; } = null!;  // e.g., "ALFKI"
-        public string CompanyName { get; set; } = null!;
-        public string? ContactName { get; set; }
-        public string? ContactTitle { get; set; }
-        public string? Address { get; set; }
-        public string? City { get; set; }
-        public string? Region { get; set; }
-        public string? PostalCode { get; set; }
-        public string Country { get; set; } = null!;
-        public string? Phone { get; set; }
-    }
-
-    public class UpdateCustomerDto
-    {
-        public string CompanyName { get; set; } = null!;
-        public string? ContactName { get; set; }
-        public string? ContactTitle { get; set; }
-        public string? Address { get; set; }
-        public string? City { get; set; }
-        public string? Region { get; set; }
-        public string? PostalCode { get; set; }
-        public string Country { get; set; } = null!;
-        public string? Phone { get; set; }
-    }
-
-    public class CustomerListItemDto
-    {
-        public string CustomerID { get; set; } = null!;
-        public string CompanyName { get; set; } = null!;
-        public string? ContactName { get; set; }
-        public string? ContactTitle { get; set; }
-        public string? Address { get; set; }
-        public string? City { get; set; }
-        public string? Region { get; set; }
-        public string? PostalCode { get; set; }
-        public string Country { get; set; } = null!;
-        public string? Phone { get; set; }
-    }
-
-    // ===================
+    
+    // -------------------
     // CUSTOMER REPOSITORY
-    // ===================
+    // -------------------
     public class CustomerRepository
     {
-        static string connectionString =
-            @"Data Source=.\SQLEXPRESS;Initial Catalog=NorthwindDb;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+        private static readonly string connectionString =
+            @"Data Source=.\SQLEXPRESS;Initial Catalog=NORTHWIND;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
 
         // -------------------
         // INSERT
         // -------------------
-        public static int InsertCustomer(CreateCustomerDto dto)
+        public static int InsertCustomer(Dto.CreateCustomerDto dto)
         {
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
             string query = @"
                 INSERT INTO Customers
-                (
-                    CustomerID,
-                    CompanyName,
-                    ContactName,
-                    ContactTitle,
-                    Address,
-                    City,
-                    Region,
-                    PostalCode,
-                    Country,
-                    Phone
-                )
+                    (CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone)
                 VALUES
-                (
-                    @CustomerID,
-                    @CompanyName,
-                    @ContactName,
-                    @ContactTitle,
-                    @Address,
-                    @City,
-                    @Region,
-                    @PostalCode,
-                    @Country,
-                    @Phone
-                );
+                    (@CustomerID, @CompanyName, @ContactName, @ContactTitle, @Address, @City, @Region, @PostalCode, @Country, @Phone);
             ";
 
             using var cmd = new SqlCommand(query, conn);
@@ -112,7 +46,7 @@ namespace Nortwind.Api.Data
         // -------------------
         // UPDATE
         // -------------------
-        public static int UpdateCustomer(string id, UpdateCustomerDto dto)
+        public static int UpdateCustomer(string id, Dto.UpdateCustomerDto dto)
         {
             using var conn = new SqlConnection(connectionString);
             conn.Open();
@@ -145,32 +79,63 @@ namespace Nortwind.Api.Data
 
             return cmd.ExecuteNonQuery();
         }
-
-        // -------------------
-        // DELETE
-        // -------------------
-        public static bool DeleteCustomer(string id)
+        public static bool DeleteCustomer(string id, out string errorMessage)
         {
-            using var conn = new SqlConnection(connectionString);
-            conn.Open();
+            errorMessage = null;
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
 
-            string query = "DELETE FROM Customers WHERE CustomerID = @CustomerID";
-            using var cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add("@CustomerID", SqlDbType.NChar, 5).Value = id;
+                    // Check if customer has related orders
+                    string checkOrdersQuery = "SELECT COUNT(*) FROM Orders WHERE CustomerID = @CustomerID";
+                    using (SqlCommand checkCmd = new SqlCommand(checkOrdersQuery, conn))
+                    {
+                        checkCmd.Parameters.AddWithValue("@CustomerID", id);
+                        int orderCount = (int)checkCmd.ExecuteScalar();
 
-            return cmd.ExecuteNonQuery() > 0;
+                        if (orderCount > 0)
+                        {
+                            errorMessage = "Cannot delete customer: related orders exist.";
+                            return false;
+                        }
+                    }
+
+                    // Delete customer
+                    string deleteQuery = "DELETE FROM Customers WHERE CustomerID = @CustomerID";
+                    using (SqlCommand deleteCmd = new SqlCommand(deleteQuery, conn))
+                    {
+                        deleteCmd.Parameters.AddWithValue("@CustomerID", id);
+                        int rowsAffected = deleteCmd.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+                return false;
+            }
         }
+
+        
 
         // -------------------
         // GET ALL
         // -------------------
-        public static List<CustomerListItemDto> GetAllCustomers()
+        public static List<Dto.CustomerListItemDto> GetAllCustomers()
         {
             var customers = new List<CustomerListItemDto>();
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
-            string query = "SELECT * FROM Customers";
+            string query = @"
+                SELECT CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone
+                FROM Customers
+                ORDER BY CompanyName;
+            ";
+
             using var cmd = new SqlCommand(query, conn);
             using var reader = cmd.ExecuteReader();
 
@@ -178,15 +143,15 @@ namespace Nortwind.Api.Data
             {
                 customers.Add(new CustomerListItemDto
                 {
-                    CustomerID = reader["CustomerID"].ToString(),
-                    CompanyName = reader["CompanyName"].ToString(),
+                    CustomerID = reader["CustomerID"]?.ToString() ?? string.Empty,
+                    CompanyName = reader["CompanyName"]?.ToString() ?? string.Empty,
                     ContactName = reader["ContactName"] != DBNull.Value ? reader["ContactName"].ToString() : null,
                     ContactTitle = reader["ContactTitle"] != DBNull.Value ? reader["ContactTitle"].ToString() : null,
                     Address = reader["Address"] != DBNull.Value ? reader["Address"].ToString() : null,
                     City = reader["City"] != DBNull.Value ? reader["City"].ToString() : null,
                     Region = reader["Region"] != DBNull.Value ? reader["Region"].ToString() : null,
                     PostalCode = reader["PostalCode"] != DBNull.Value ? reader["PostalCode"].ToString() : null,
-                    Country = reader["Country"].ToString(),
+                    Country = reader["Country"]?.ToString() ?? string.Empty,
                     Phone = reader["Phone"] != DBNull.Value ? reader["Phone"].ToString() : null
                 });
             }
@@ -202,7 +167,12 @@ namespace Nortwind.Api.Data
             using var conn = new SqlConnection(connectionString);
             conn.Open();
 
-            string query = "SELECT * FROM Customers WHERE CustomerID = @CustomerID";
+            string query = @"
+                SELECT CustomerID, CompanyName, ContactName, ContactTitle, Address, City, Region, PostalCode, Country, Phone
+                FROM Customers
+                WHERE CustomerID = @CustomerID;
+            ";
+
             using var cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add("@CustomerID", SqlDbType.NChar, 5).Value = id;
 
@@ -211,15 +181,15 @@ namespace Nortwind.Api.Data
 
             return new CustomerListItemDto
             {
-                CustomerID = reader["CustomerID"].ToString(),
-                CompanyName = reader["CompanyName"].ToString(),
+                CustomerID = reader["CustomerID"]?.ToString() ?? string.Empty,
+                CompanyName = reader["CompanyName"]?.ToString() ?? string.Empty,
                 ContactName = reader["ContactName"] != DBNull.Value ? reader["ContactName"].ToString() : null,
                 ContactTitle = reader["ContactTitle"] != DBNull.Value ? reader["ContactTitle"].ToString() : null,
                 Address = reader["Address"] != DBNull.Value ? reader["Address"].ToString() : null,
                 City = reader["City"] != DBNull.Value ? reader["City"].ToString() : null,
                 Region = reader["Region"] != DBNull.Value ? reader["Region"].ToString() : null,
                 PostalCode = reader["PostalCode"] != DBNull.Value ? reader["PostalCode"].ToString() : null,
-                Country = reader["Country"].ToString(),
+                Country = reader["Country"]?.ToString() ?? string.Empty,
                 Phone = reader["Phone"] != DBNull.Value ? reader["Phone"].ToString() : null
             };
         }

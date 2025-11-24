@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using  Nortwind.Api.Data;
-using static Nortwind.Api.Data.CustomerRepositery;
+using Nortwind.Api.Data;
+using Nortwind.Api.Dto;
+using System.Collections.Generic;
 
 namespace WebApplication1.Controllers
 {
@@ -8,83 +9,90 @@ namespace WebApplication1.Controllers
     [Route("[controller]")]
     public class CustomersController : ControllerBase
     {
-        private readonly ILogger<CustomersController> _logger;
-
-        public CustomersController(ILogger<CustomersController> logger)
-        {
-            _logger = logger;
-        }
-
-        
+        // -------------------
+        // GET ALL
+        // -------------------
         [HttpGet(Name = "GetCustomers")]
-        public IEnumerable<Customer > Get()
+        public ActionResult<IEnumerable<CustomerListItemDto>> Get()
         {
-            return CustomerRepositery.GetAllCustomers();
+            var customers = CustomerRepository.GetAllCustomers();
+            return Ok(customers);
         }
 
-       
+        // -------------------
+        // GET BY ID
+        // -------------------
         [HttpGet("{id}", Name = "GetCustomerById")]
-        public ActionResult<Customer> Get(string id)
+        public ActionResult<CustomerListItemDto> Get(string id)
         {
-            var customer = CustomerRepositery.GetCustomerById(id);
-
+            var customer = CustomerRepository.GetCustomerById(id);
             if (customer == null)
-                return NotFound();
+                return NotFound(new { message = "Customer not found." });
 
-            return customer;
+            return Ok(customer);
         }
 
-        
+        // -------------------
+        // CREATE
+        // -------------------
         [HttpPost(Name = "CreateCustomer")]
-        public IActionResult Post(Customer  model)
+        public IActionResult Post([FromBody] CreateCustomerDto model)
         {
-            int result = CustomerRepositery.InsertCustomer(
-                model.Id,
-                model.CompanyName,
-                model.ContactName,
-                model.Country
-            );
+            if (CustomerRepository.IsExists(model.CustomerID))
+                return Conflict(new { message = "Customer with this ID already exists." });
+
+            int result = CustomerRepository.InsertCustomer(model);
 
             if (result > 0)
-                return Ok(new { message = "Customer created." });
+                return Ok(new { message = "Customer created successfully." });
 
-            return BadRequest("Insert failed.");
+            return BadRequest(new { message = "Insert failed." });
         }
 
-        
+        // -------------------
+        // UPDATE
+        // -------------------
         [HttpPut("{id}", Name = "UpdateCustomer")]
-        public IActionResult Put(string id, Customer model)
+        public IActionResult Put(string id, [FromBody] UpdateCustomerDto model)
         {
-            var existing = CustomerRepositery.GetCustomerById(id);
-
+            var existing = CustomerRepository.GetCustomerById(id);
             if (existing == null)
-                return NotFound();
+                return NotFound(new { message = "Customer not found." });
 
-            model.Id = id;
-
-            int result = CustomerRepositery.UpdateCustomer(model);
+            int result = CustomerRepository.UpdateCustomer(id, model);
 
             if (result > 0)
-                return Ok(new { message = "Customer updated." });
+                return Ok(new { message = "Customer updated successfully." });
 
-            return BadRequest("Update failed.");
+            return BadRequest(new { message = "Update failed." });
         }
 
-        
+        // -------------------
+        // DELETE
+        // -------------------
         [HttpDelete("{id}", Name = "DeleteCustomer")]
         public IActionResult Delete(string id)
         {
-            var existing = CustomerRepositery.GetCustomerById(id);
+            if (string.IsNullOrWhiteSpace(id))
+                return BadRequest(new { message = "Invalid customer ID." });
 
+            var existing = CustomerRepository.GetCustomerById(id);
             if (existing == null)
-                return NotFound();
+                return NotFound(new { message = "Customer not found." });
 
-            int result = CustomerRepositery.DeleteCustomer(id);
+            bool result = CustomerRepository.DeleteCustomer(id, out string errorMessage);
 
-            if (result > 0)
-                return Ok(new { message = "Customer deleted." });
+            if (result)
+                return Ok(new { message = "Customer deleted successfully." });
 
-            return BadRequest("Delete failed.");
+            // Return appropriate message if deletion failed due to related orders
+            if (errorMessage != null && errorMessage.Contains("related orders"))
+                return BadRequest(new { message = errorMessage });
+
+            return StatusCode(500, new { message = "Delete operation failed.", detail = errorMessage });
         }
+
+
+
     }
 }
