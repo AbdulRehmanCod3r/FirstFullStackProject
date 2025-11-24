@@ -68,7 +68,7 @@ namespace Nortwind.Api.Data
                             Country = dr["Country"]?.ToString(),
                             HomePhone = dr["HomePhone"]?.ToString(),
                             Extension = dr["Extension"]?.ToString(),
-                            Photo = dr["Photo"] == DBNull.Value ? null : (byte[])dr["Photo"],
+                            
                             Notes = dr["Notes"]?.ToString(),
                             ReportsTo = dr["ReportsTo"] == DBNull.Value ? null : (int?)dr["ReportsTo"],
                             PhotoPath = dr["PhotoPath"]?.ToString()
@@ -106,7 +106,6 @@ namespace Nortwind.Api.Data
                         Country = dr["Country"]?.ToString(),
                         HomePhone = dr["HomePhone"]?.ToString(),
                         Extension = dr["Extension"]?.ToString(),
-                        Photo = dr["Photo"] == DBNull.Value ? null : (byte[])dr["Photo"],
                         Notes = dr["Notes"]?.ToString(),
                         ReportsTo = dr["ReportsTo"] == DBNull.Value ? null : (int?)dr["ReportsTo"],
                         PhotoPath = dr["PhotoPath"]?.ToString()

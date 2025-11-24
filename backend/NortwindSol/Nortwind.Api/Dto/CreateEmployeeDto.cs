@@ -20,7 +20,7 @@ namespace Nortwind.Api.Dto
         public string? HomePhone { get; set; }
         public string? Extension { get; set; }
         [JsonIgnore]
-        public byte[]? Photo { get; set; }
+        
         public string? Notes { get; set; }
         public int? ReportsTo { get; set; }
         public string? PhotoPath { get; set; }
