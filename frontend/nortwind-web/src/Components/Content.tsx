@@ -1,78 +1,101 @@
-function Content() {
-    return (
-        <div className="container-fluid"> 
-            <div className="card shadow-sm mt-4 w-100"> 
-                <div className="card-body">
+// import { useEffect, useState } from "react"
+// import { getProducts, type Product } from "../api/Products"
 
-                    <h5 className="fw-semibold mb-4">Customer List</h5>
+// function Content() {
 
-                    <div className="table-responsive w-100"> 
-                        <table className="table align-middle table-bordered">
-                            <thead className="bg-light text-left">
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Assigned</th>
-                                    <th>Name</th>
-                                    <th>Priority</th>
-                                    <th>Budget</th>
-                                </tr>
-                            </thead>
+//     const [products, setProducts] = useState<Product[] | null>(null)
+//     const [loading, setLoading] = useState(false)
+//     const [error, setError] = useState<string | null>(null)
 
-                            <tbody>
+//     useEffect(() => {
+//         fetchProducts()
+//     }, [])
 
-                                <tr>
-                                    <td>1</td>
-                                    <td>
-                                        <div className="fw-bold">Sunil Joshi</div>
-                                        <small className="text-muted">Web Designer</small>
-                                    </td>
-                                    <td>Elite Admin</td>
-                                    <td><span className="badge bg-primary">Low</span></td>
-                                    <td className="fw-bold">$3.9</td>
-                                </tr>
+//     async function fetchProducts() {
+//         setLoading(true);
+//         setError(null);
+//         try {
+//             const data = await getProducts();
+//             setProducts(data);
+//         } catch (err: unknown) {
+//             if (err instanceof Error) {
+//                 setError(err.message);
+//             } else {
+//                 setError("Unknown error");
+//             }
+//             setProducts(null);
+//         } finally {
+//             setLoading(false);
+//         }
+//     }
 
-                                <tr>
-                                    <td>2</td>
-                                    <td>
-                                        <div className="fw-bold">Andrew McDownland</div>
-                                        <small className="text-muted">Project Manager</small>
-                                    </td>
-                                    <td>Real Homes WP Theme</td>
-                                    <td><span className="badge bg-secondary">Medium</span></td>
-                                    <td className="fw-bold">$24.5k</td>
-                                </tr>
 
-                                <tr>
-                                    <td>3</td>
-                                    <td>
-                                        <div className="fw-bold">Christopher Jamil</div>
-                                        <small className="text-muted">Project Manager</small>
-                                    </td>
-                                    <td>MedicalPro WP Theme</td>
-                                    <td><span className="badge bg-danger">High</span></td>
-                                    <td className="fw-bold">$12.8k</td>
-                                </tr>
+//     return (
+//         <div className="container py-4">
+//             <div className="table-card">
+//                 <div className="d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-between mb-3">
+//                     <div>
+//                         <h5 className="mb-0">Products</h5>
+//                         <small className="text-muted">Fetched from API</small>
+//                     </div>
 
-                                <tr>
-                                    <td>4</td>
-                                    <td>
-                                        <div className="fw-bold">Nirav Joshi</div>
-                                        <small className="text-muted">Frontend Engineer</small>
-                                    </td>
-                                    <td>Hosting Press HTML</td>
-                                    <td><span className="badge bg-success">Critical</span></td>
-                                    <td className="fw-bold">$2.4k</td>
-                                </tr>
+//                     <button className="btn btn-primary btn-sm" onClick={fetchProducts} disabled={loading}>
+//                         {loading ? "Loading..." : "Refresh"}
+//                     </button>
+//                 </div>
 
-                            </tbody>
+//                 {error && <p className="text-danger">Error: {error}</p>}
+//                 {loading && <p>Loading products...</p>}
 
-                        </table>
-                    </div>
+//                 <div className="table-responsive">
+//                     <table className="table align-middle table-hover">
+//                         <thead className="bg-white">
+//                             <tr>
+//                                 <th>ProductID</th>
+//                                 <th>Product Name</th>
+//                                 <th>SupplierID</th>
+//                                 <th>CategoryID</th>
+//                                 <th>Unit Price</th>
+//                                 <th>Units in Stock</th>
+//                                 <th>Units On Order</th>
+//                                 <th>Reorder Level</th>
+//                                 <th>Discontinued</th>
+//                                 <th>Actions</th>
+//                             </tr>
+//                         </thead>
 
-                </div>
-            </div>
-        </div>
-    )
-}
+//                         <tbody>
+//                             {!loading && products && products.map((p) => (
+//                                 <tr key={p.productID}>
+//                                     <td>{p.productID}</td>
+//                                     <td>{p.productName}</td>
+//                                     <td>{p.supplierID}</td>
+//                                     <td>{p.categoryID}</td>
+//                                     <td>${p.unitPrice}</td>
+//                                     <td>{p.unitsInStock}</td>
+//                                     <td>{p.unitsOnOrder}</td>
+//                                     <td>{p.reorderLevel}</td>
+//                                     <td>{p.discontinued ? "Yes" : "No"}</td>
+//                                     <td>
+//                                         <div className="d-flex gap-1">
+//                                             <button className="btn btn-sm btn-outline-primary">View</button>
+//                                             <button className="btn btn-sm btn-outline-success">Edit</button>
+//                                         </div>
+//                                     </td>
+//                                 </tr>
+//                             ))}
 
-export default Content
+//                             {!loading && products && products.length === 0 && (
+//                                 <tr>
+//                                     <td colSpan={10} className="text-center">No Products Found</td>
+//                                 </tr>
+//                             )}
+//                         </tbody>
+//                     </table>
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
+
+// export default Content

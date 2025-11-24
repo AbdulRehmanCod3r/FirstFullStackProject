@@ -67,3 +67,195 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+/* Header Dark Red Theme */
+.app-header {
+  background-color: #272953 !important; /* Dark Red */
+}
+
+/* Navbar Icons & Text */
+.app-header .nav-link,
+.app-header .nav-link i {
+  color: #ffffff !important;   /* Bright Red */
+  transition: 0.3s ease;
+}
+
+/* Hover → White */
+.app-header .nav-link:hover i,
+.app-header .nav-link:hover {
+  color: #000000 !important;
+}
+
+/* Notification Dot */
+.app-header .notification {
+  background-color: #ff4d4d !important;
+}
+
+/* Dropdown Background */
+.dropdown-menu {
+  background-color: #272953 !important; /* Darker red */
+  border: 1px solid #272953;
+}
+
+/* Dropdown Items Text + Icons */
+.dropdown-item i,
+.dropdown-item p {
+  color: #f3eded !important;
+  font-size: 18px !important;
+}
+
+/* Hover → White */
+.dropdown-item:hover i,
+.dropdown-item:hover p {
+  color: #ffffff !important;
+
+}
+
+.dropdown-item:hover {
+  background-color: #660000 !important;
+}
+
+/* Logout Button */
+.dropdown-item .btn-outline-primary,
+.btn-outline-primary {
+  border-color: #ff4d4d !important;
+  color: #ff4d4d !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: #ff4d4d !important;
+  color: #fff !important;
+}
+
+
+/* header css end */
+
+/* Sidebar Dark Red Theme */
+.left-sidebar {
+  background-color: #272953 !important;   /* Dark Red */
+  color: #fcfcfc !important;    
+  text-decoration: none;          /* Default red text */
+}
+
+/* Sidebar scroll area */
+.scroll-sidebar {
+  background-color: #272953 !important;
+}
+
+/* Brand Logo Text/Icon */
+.left-sidebar .logo-img,
+.left-sidebar .logo-img img {
+  color: #fff !important;
+}
+
+/* Close Button */
+.left-sidebar .close-btn i {
+  color: #000 !important;
+}
+
+.left-sidebar .close-btn:hover i {
+  color: #ffffff !important;
+}
+
+/* Small Heading (Home) */
+.nav-small-cap span,
+.nav-small-cap i {
+  color: #ff4d4d !important;
+  transition: 0.3s;
+}
+
+.nav-small-cap:hover span,
+.nav-small-cap:hover i {
+  color: #ffffff !important;
+}
+
+/* Sidebar link (anchor) */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff !important;
+  padding: 12px 15px;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+/* Icons inside links */
+.sidebar-link i {
+  color: #ff4d4d !important;
+  transition: 0.3s ease;
+}
+
+/* HOVER = full white */
+.sidebar-link:hover,
+.sidebar-link:hover i,
+.sidebar-link:hover .hide-menu {
+  color: #ffffff !important;
+}
+
+/* Active link (optional) */
+.sidebar-item.active > .sidebar-link {
+  background-color: #160066 !important;
+  color: #ffffff !important;
+}
+
+.sidebar-item.active i {
+  color: #ffffff !important;
+}
+
+/* Remove Bootstrap default blue focus */
+.sidebar-link:focus {
+  box-shadow: none !important;
+}
+
+
+ .table-card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.8));
+      backdrop-filter: blur(6px);
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(20, 30, 60, 0.06);
+      padding: 1.15rem;
+    }
+
+    /* Table visuals */
+    .table thead th {
+      position: sticky;
+      top: 0;
+      background: #ffffff;
+      z-index: 3;
+      border-bottom: 2px solid rgba(0,0,0,0.06);
+    }
+    .table tbody tr:hover { transform: translateY(-1px); transition: .12s; }
+    .table tbody tr { transition: background .12s, transform .12s; }
+    .table td, .table th { vertical-align: middle; }
+
+    /* Mobile stacked rows using data-label */
+    @media (max-width: 760px) {
+      .table thead { display: none; }
+      .table tbody td {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding-left: 50%;
+        position: relative;
+        white-space: normal;
+        border: none;
+      }
+      .table tbody td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 1rem;
+        width: 45%;
+        padding-right: 1rem;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .table tbody tr { margin-bottom: 0.75rem; display: block; border-radius: 8px; background: rgba(250,250,250,0.95); padding: .6rem; }
+    }
+
+    /* Small UI helpers */
+    .badge-status { font-weight: 600; font-size: .78rem; padding: .35rem .55rem; border-radius: 999px; }
+    .avatar {
+      width:40px;height:40px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;
+      font-weight:700;color:#495057;background:#f1f3f5;
+    }
