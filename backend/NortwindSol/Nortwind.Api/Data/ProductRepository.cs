@@ -263,6 +263,4 @@ WHERE ProductID = @id";
             }
         }
     }
-
-  
 }
