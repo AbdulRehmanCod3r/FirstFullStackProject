@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Nortwind.Api.Dto;
+using System.Data;
 
 namespace Nortwind.Api.Data
 {
@@ -29,18 +30,18 @@ namespace Nortwind.Api.Data
                 ";
 
                 using var cmd = new SqlCommand(insertOrderQuery, conn, transaction);
-                cmd.Parameters.AddWithValue("@CustomerID", dto.CustomerID);
-                cmd.Parameters.AddWithValue("@EmployeeID", (object?)dto.EmployeeID ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@OrderDate", (object?)dto.OrderDate ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@RequiredDate", (object?)dto.RequiredDate ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipVia", (object?)dto.ShipVia ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@Freight", (object?)dto.Freight ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipName", (object?)dto.ShipName ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipAddress", (object?)dto.ShipAddress ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipCity", (object?)dto.ShipCity ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipRegion", (object?)dto.ShipRegion ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipPostalCode", (object?)dto.ShipPostalCode ?? DBNull.Value);
-                cmd.Parameters.AddWithValue("@ShipCountry", (object?)dto.ShipCountry ?? DBNull.Value);
+                cmd.Parameters.Add("@CustomerID", SqlDbType.NChar, 5).Value = dto.CustomerID;
+                cmd.Parameters.AddWithValue("@EmployeeID", dto.EmployeeID);
+                cmd.Parameters.AddWithValue("@OrderDate", dto.OrderDate);
+                cmd.Parameters.AddWithValue("@RequiredDate", dto.RequiredDate);
+                cmd.Parameters.AddWithValue("@ShipVia", dto.ShipVia);
+                cmd.Parameters.AddWithValue("@Freight", dto.Freight);
+                cmd.Parameters.AddWithValue("@ShipName", dto.ShipName); 
+                cmd.Parameters.AddWithValue("@ShipAddress", dto.ShipAddress);
+                cmd.Parameters.AddWithValue("@ShipCity", dto.ShipCity );
+                cmd.Parameters.AddWithValue("@ShipRegion",dto.ShipRegion );
+                cmd.Parameters.AddWithValue("@ShipPostalCode", dto.ShipPostalCode );
+                cmd.Parameters.AddWithValue("@ShipCountry", dto.ShipCountry );
 
                 int newOrderId = Convert.ToInt32(cmd.ExecuteScalar());
 
@@ -213,7 +214,7 @@ namespace Nortwind.Api.Data
 
                 using var cmd = new SqlCommand(updateOrderQuery, conn, transaction);
                 cmd.Parameters.AddWithValue("@OrderID", orderId);
-                cmd.Parameters.AddWithValue("@CustomerID", dto.CustomerID);
+                cmd.Parameters.Add("@CustomerID", SqlDbType.NChar, 5).Value = dto.CustomerID;
                 cmd.Parameters.AddWithValue("@EmployeeID", (object?)dto.EmployeeID ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@OrderDate", (object?)dto.OrderDate ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@RequiredDate", (object?)dto.RequiredDate ?? DBNull.Value);
@@ -284,11 +285,11 @@ namespace Nortwind.Api.Data
                 return false;
             }
         }
-        public static bool IsExists(int id)
-        {
-            var order = GetOrderById(id);
-            return order != null;
-        }
+   public static bool IsExists(int id)
+    {
+        var order = GetOrderById(id);
+        return order != null;
+    }
     }
 
 }

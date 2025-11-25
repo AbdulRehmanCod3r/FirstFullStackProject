@@ -10,6 +10,12 @@ public class OrdersController : ControllerBase
 {
     private readonly ILogger<OrdersController> _logger;
 
+    public OrdersController(ILogger<OrdersController> logger)
+    {
+        _logger = logger;
+    }
+
+
     // -------------------
     // GET ALL ORDERS
     // -------------------
@@ -36,20 +42,20 @@ public class OrdersController : ControllerBase
     // -------------------
     // CREATE ORDER
     // -------------------
-    [HttpPost(Name = "AddOrder")]
-    public IActionResult Add([FromBody] CreateOrderDto dto)
+   [HttpPost(Name = "AddOrder")]
+public IActionResult Add([FromBody] CreateOrderDto dto)
+{
+    try
     {
-        try
-        {
-            int newOrderId = OrderRepository.InsertOrder(dto);
-            return CreatedAtAction(nameof(GetById), new { id = newOrderId });
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating order");
-            return BadRequest(new { error = ex.Message });
-        }
+        int newOrderId = OrderRepository.InsertOrder(dto);
+        return CreatedAtAction(nameof(GetById), new { id = newOrderId });
     }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error creating order");
+        return BadRequest(new { error = ex.Message });
+    }
+}
 
 
     // -------------------
