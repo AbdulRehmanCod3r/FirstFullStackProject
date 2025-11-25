@@ -216,15 +216,5 @@ namespace Nortwind.Api.Data
 
             return Convert.ToInt32(cmd.ExecuteScalar()) > 0;
         }
-
-        internal static string InsertCustomer(CreateCategoryDto model)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static int UpdateCustomer(string id, UpdateCategoryDto model)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
