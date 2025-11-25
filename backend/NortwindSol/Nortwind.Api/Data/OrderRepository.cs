@@ -284,5 +284,11 @@ namespace Nortwind.Api.Data
                 return false;
             }
         }
+        public static bool IsExists(int id)
+        {
+            var order = GetOrderById(id);
+            return order != null;
+        }
     }
+
 }

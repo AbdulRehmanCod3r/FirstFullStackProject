@@ -10,7 +10,6 @@ public class OrdersController : ControllerBase
 {
     private readonly ILogger<OrdersController> _logger;
 
-
     // -------------------
     // GET ALL ORDERS
     // -------------------
@@ -29,9 +28,7 @@ public class OrdersController : ControllerBase
     {
         var order = OrderRepository.GetOrderById(id);
         if (order == null)
-        {
             return NotFound();
-        }
 
         return Ok(order);
     }
@@ -45,8 +42,7 @@ public class OrdersController : ControllerBase
         try
         {
             int newOrderId = OrderRepository.InsertOrder(dto);
-            var order = OrderRepository.GetOrderById(newOrderId);
-            return CreatedAtAction(nameof(GetById), new { id = newOrderId }, order);
+            return CreatedAtAction(nameof(GetById), new { id = newOrderId });
         }
         catch (Exception ex)
         {
@@ -55,22 +51,19 @@ public class OrdersController : ControllerBase
         }
     }
 
+
     // -------------------
     // UPDATE ORDER
     // -------------------
     [HttpPut("{id}", Name = "UpdateOrder")]
     public IActionResult Update(int id, [FromBody] UpdateOrderDto dto)
     {
-        if (OrderRepository.GetOrderById(id) == null)
-        {
+        if (!OrderRepository.IsExists(id))
             return NotFound();
-        }
 
         bool updated = OrderRepository.UpdateOrder(id, dto);
         if (!updated)
-        {
             return BadRequest(new { error = "Failed to update order" });
-        }
 
         var order = OrderRepository.GetOrderById(id);
         return Ok(order);
@@ -82,18 +75,14 @@ public class OrdersController : ControllerBase
     [HttpDelete("{id}", Name = "DeleteOrder")]
     public IActionResult Delete(int id)
     {
-        if (OrderRepository.GetOrderById(id) == null)
-        {
+        if (!OrderRepository.IsExists(id))
             return NotFound();
-        }
 
         try
         {
             bool deleted = OrderRepository.DeleteOrder(id);
             if (!deleted)
-            {
                 return BadRequest(new { error = "Failed to delete order" });
-            }
 
             return NoContent();
         }
@@ -104,4 +93,5 @@ public class OrdersController : ControllerBase
         }
     }
 }
+
 
