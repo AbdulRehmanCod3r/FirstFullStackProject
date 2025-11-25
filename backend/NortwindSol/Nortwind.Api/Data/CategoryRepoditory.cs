@@ -160,17 +160,6 @@ from Categories c
                 }
             }
         }
-
-        internal static object GetCategoryById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static int UpdateCategory(string id, UpdateCategoryDto model)
-        {
-            throw new NotImplementedException();
-        }
-
         
     }
 }
