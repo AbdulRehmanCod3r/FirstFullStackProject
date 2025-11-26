@@ -1,53 +1,82 @@
+import { useEffect, useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
-import Header from './Components/Header'
-import SideBar from './Components/SideBar'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import ProductList from './Components/ProductList'
-import EmployeeList from './Components/EmployeeList'
-import AddProduct from './Components/AddProduct'
-import EditProduct from './Components/EditProduct'
-import CustomerList from './Components/CustomerList'
-import AddCustomer from './Components/AddCustomer'
-import EditCustomer from './Components/EditCustomer'
-import SupplierList from './Components/SupplierList'
-import AddSupplier from './Components/AddSupplier'
-import EditSupplier from './Components/EditSupplier'
+import { getWeatherForecasts, type WeatherForecast } from './api/weather'
 
 function App() {
+  const [count, setCount] = useState(0)
+  const [forecasts, setForecasts] = useState<WeatherForecast[] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchForecasts()
+  }, [])
+
+  async function fetchForecasts() {
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await getWeatherForecasts()
+      setForecasts(data)
+    } catch (err: any) {
+      setError(err?.message ?? 'Unknown error')
+      setForecasts(null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <Router>
-      <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
 
-        {/* Left Sidebar */}
-        <SideBar />
+      <div className="card">
+        <button onClick={() => setCount((c) => c + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.tsx</code> and save to test HMR
+        </p>
+      </div>
 
-        {/* Content Area */}
-        <div className="body-wrapper">
-          <Header />
-          <div className="container-fluid">
-            <Routes>
-              <Route path="/" element={<ProductList />} /> {/* Default page */}
-              <Route path="/products" element={<ProductList />} />
-              <Route path="/add-product" element={<AddProduct />} />
-              <Route path="/products/edit/:id" element={<EditProduct />} />
-
-
-              <Route path="/customers" element={<CustomerList />} />
-              <Route path="/add-customer" element={<AddCustomer />} />
-              <Route path="/edit-customer/:id" element={<EditCustomer />} />
-
-              <Route path="/suppliers" element={<SupplierList />} />
-              <Route path="/suppliers/add" element={<AddSupplier />} />
-              <Route path="/suppliers/edit/:id" element={<EditSupplier />} />
-
-              <Route path="/employees" element={<EmployeeList />} />
-            </Routes>
-          </div>
+      <section>
+        <h2>Weather Forecast</h2>
+        <div>
+          <button onClick={fetchForecasts} disabled={loading}>
+            Refresh
+          </button>
         </div>
 
-      </div>
-    </Router>
+        {loading && <p>Loading forecasts...</p>}
+        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+
+        {!loading && !error && forecasts && (
+          <ul>
+            {forecasts.map((f) => (
+              <li key={f.date}>
+                <strong>{new Date(f.date).toLocaleDateString()}</strong> — {f.summary ?? 'No summary'} — {f.temperatureC}°C / {f.temperatureF}°F
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {!loading && !error && forecasts && forecasts.length === 0 && (
+          <p>No forecasts returned.</p>
+        )}
+      </section>
+
+      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
+    </>
   )
 }
 
