@@ -1,17 +1,17 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class RegionRepository
     {
-        public string ConnectionString = "Data Source=DESKTOP-S08JF63\\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
 
         public bool AddRegion(CreateRegionDto dto)
         {
             string insertquery = "INSERT INTO Region(RegionID,RegionDescription) VALUES(@RegionID, @RegionDescription)";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(insertquery, con))
                 {
@@ -26,7 +26,7 @@ namespace Nortwind.Api.Data
         public List<RegionListItemDto> GetRegion()
         {
             List<RegionListItemDto> Regions = new List<RegionListItemDto>();
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string selectquery = "select *from Region";
                 using (SqlCommand cmd = new SqlCommand(selectquery, con))
@@ -49,7 +49,7 @@ namespace Nortwind.Api.Data
 
         public RegionListItemDto GetRegionById(int RegionId)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT * FROM Region WHERE RegionID=@RegionId";
                 SqlCommand cmd = new SqlCommand(query, con);
@@ -71,7 +71,7 @@ namespace Nortwind.Api.Data
         }
         public void DeleteRegion(int RegionID)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 con.Open();
                 // 4. Finally delete the employee row
@@ -88,7 +88,7 @@ namespace Nortwind.Api.Data
 
         public bool UpdateRegion(int id, UpdateRegionDto Dto)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "UPDATE Region SET RegionDescription=@RegionDescription  WHERE RegionID = @RegionID";
     

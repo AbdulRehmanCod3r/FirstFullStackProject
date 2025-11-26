@@ -1,16 +1,15 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class ShipperRepository
     {
-        public static string ConnectionString = @"Data Source=DESKTOP-S08JF63\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Trust Server Certificate=True;";
-
         public static int InsertShipper(CreateShipperDto dto)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
 
                 con.Open();
@@ -31,7 +30,7 @@ namespace Nortwind.Api.Data
 
         public static int UpdateShipper(int ShipperID, UpdateShipperDto dto)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
 
                 string query = "\r\nUPDATE Shippers\r\nSET CompanyName = @CompanyName,\r\n    Phone = @Phone\r\nWHERE ShipperID = @ShipperID;";
@@ -56,7 +55,7 @@ namespace Nortwind.Api.Data
         }
         public static void DeleteShipper(int ShipperID)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 con.Open();
 
@@ -87,7 +86,7 @@ SELECT
     s.Phone
     
 FROM Shippers s";
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 con.Open();
                 using (SqlCommand cmd = new SqlCommand(query, con))
@@ -111,7 +110,7 @@ FROM Shippers s";
 
         public static ShipperListItemDto GetShipperById(int ShipperID)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = @"
 SELECT 

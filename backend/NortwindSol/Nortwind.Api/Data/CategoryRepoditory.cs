@@ -1,15 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class CategoryRepository
     {
-        static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=NorthwindDb;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
-
         public static int InsertCategory(CreateCategoryDto dto)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 string query = @"
@@ -40,7 +39,7 @@ namespace Nortwind.Api.Data
 
         public static int UpdateCategory(int id, UpdateCategoryDto dto)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query =
                     "UPDATE Categories SET " +
@@ -63,7 +62,7 @@ namespace Nortwind.Api.Data
 
         public static void DeleteCategories(int CategoryID)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 string query = "DELETE FROM Categories WHERE CategoryID = @CategoryID";
@@ -88,7 +87,7 @@ SELECT
 from Categories c
 ";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -112,7 +111,7 @@ from Categories c
 
         public static bool IsExists(int id)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT COUNT(1) FROM Categories WHERE CategoryID = @id";
 
@@ -129,7 +128,7 @@ from Categories c
 
         internal static CategoryListItemDto GetCategoryById(int id)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = @"
                    SELECT 

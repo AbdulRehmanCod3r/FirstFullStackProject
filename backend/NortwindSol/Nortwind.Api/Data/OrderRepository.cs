@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 using System.Data;
 
@@ -6,13 +7,11 @@ namespace Nortwind.Api.Data
 {
     public class OrderRepository
     {
-        private static readonly string connectionString =
-            @"Data Source=.\SQLEXPRESS;Initial Catalog=NORTHWIND;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
 
         // ------------------- INSERT ORDER -------------------
         public static int InsertOrder(CreateOrderDto dto)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
             using var transaction = conn.BeginTransaction();
             try
@@ -75,7 +74,7 @@ namespace Nortwind.Api.Data
         public static List<OrderListItemDto> GetAllOrders()
         {
             var list = new List<OrderListItemDto>();
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -138,7 +137,7 @@ namespace Nortwind.Api.Data
         // ------------------- GET ORDER BY ID -------------------
         public static OrderListItemDto? GetOrderById(int id)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -198,7 +197,7 @@ namespace Nortwind.Api.Data
         // ------------------- UPDATE ORDER -------------------
         public static bool UpdateOrder(int orderId, UpdateOrderDto dto)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
             using var transaction = conn.BeginTransaction();
             try
@@ -263,7 +262,7 @@ namespace Nortwind.Api.Data
         // ------------------- DELETE ORDER -------------------
         public static bool DeleteOrder(int orderId)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
             using var transaction = conn.BeginTransaction();
             try
