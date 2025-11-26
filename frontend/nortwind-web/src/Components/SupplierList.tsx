@@ -1,48 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { type Customer } from "../api/Customer";
+import { getSuppliers, deleteSupplier, type Supplier } from "../api/Supplier";
 import { useNavigate } from "react-router-dom";
 
-const CustomerList: React.FC = () => {
-  const [customers, setCustomers] = useState<Customer[] | null>(null);
+const SupplierList: React.FC = () => {
+  const [suppliers, setSuppliers] = useState<Supplier[] | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
-  // Pagination states
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 10;
 
-  useEffect(() => {
-    const loadCustomers = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const response = await fetch("https://localhost:7035/Customers");
-        const data = await response.json();
-        setCustomers(data);
-        setCurrentPage(1);
-      } catch (err: unknown) {
-        if (err instanceof Error) setError(err.message);
-        else setError("Unknown error");
-        setCustomers(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchSuppliers = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getSuppliers();
+      setSuppliers(data);
+      setCurrentPage(1);
+    } catch (err: unknown) {
+      if (err instanceof Error) setError(err.message);
+      else setError("Unknown error");
+      setSuppliers(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    loadCustomers();
+  useEffect(() => {
+    fetchSuppliers();
   }, []);
 
-  const deleteCustomer = async (id: number | undefined) => {
+  const handleDelete = async (id: number | undefined) => {
     if (!id) return;
-    if (window.confirm("Are you sure you want to delete this customer?")) {
+    if (window.confirm("Are you sure you want to delete this supplier?")) {
       try {
-        await fetch(`https://localhost:7035/Customers/${id}`, { method: "DELETE" });
-        setCustomers(customers?.filter(cust => cust.customerID !== id) || []);
+        await deleteSupplier(id);
+        setSuppliers(suppliers?.filter(s => s.supplierID !== id) || []);
       } catch (err) {
         console.error(err);
-        alert("Failed to delete customer. Check console.");
+        alert("Failed to delete supplier. Check console.");
       }
     }
   };
@@ -50,61 +49,62 @@ const CustomerList: React.FC = () => {
   // Pagination calculations
   const indexOfLastRecord = currentPage * recordsPerPage;
   const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-  const currentRecords = customers?.slice(indexOfFirstRecord, indexOfLastRecord) || [];
-  const totalPages = customers ? Math.ceil(customers.length / recordsPerPage) : 1;
+  const currentRecords = suppliers?.slice(indexOfFirstRecord, indexOfLastRecord) || [];
+  const totalPages = suppliers ? Math.ceil(suppliers.length / recordsPerPage) : 1;
 
   return (
     <div className="container py-4">
       <div className="table-card">
         <div className="d-flex flex-column flex-md-row gap-3 align-items-md-center justify-content-between mb-3">
           <div>
-            <h5 className="mb-0">Customers</h5>
+            <h5 className="mb-0">Suppliers</h5>
             <small className="text-muted">Fetched from API</small>
           </div>
           <button
             className="btn btn-primary btn-sm"
-            onClick={() => navigate("/add-customer")}
+            onClick={() => navigate("/suppliers/add")}
           >
-            + Add New Customer
+            + Add New Supplier
           </button>
         </div>
 
         {error && <p className="text-danger">Error: {error}</p>}
-        {loading && <p>Loading customers...</p>}
+        {loading && <p>Loading suppliers...</p>}
 
         <div className="table-responsive">
           <table className="table align-middle table-hover">
             <thead className="bg-white">
               <tr>
                 <th>ID</th>
-                <th>Company Name</th>
-                <th>Contact Name</th>
-                <th>Contact Title</th>
+                <th>Company</th>
+                <th>Contact</th>
                 <th>City</th>
                 <th>Country</th>
+                <th>Phone</th>
                 <th>Actions</th>
               </tr>
             </thead>
+
             <tbody>
-              {!loading && currentRecords.map(cust => (
-                <tr key={cust.customerID}>
-                  <td>{cust.customerID}</td>
-                  <td>{cust.companyName}</td>
-                  <td>{cust.contactName}</td>
-                  <td>{cust.contactTitle}</td>
-                  <td>{cust.city}</td>
-                  <td>{cust.country}</td>
+              {!loading && currentRecords.map(s => (
+                <tr key={s.supplierID}>
+                  <td>{s.supplierID}</td>
+                  <td>{s.companyName}</td>
+                  <td>{s.contactName}</td>
+                  <td>{s.city}</td>
+                  <td>{s.country}</td>
+                  <td>{s.phone}</td>
                   <td>
                     <div className="d-flex gap-1">
                       <button
                         className="btn btn-sm btn-outline-danger"
-                        onClick={() => deleteCustomer(cust.customerID)}
+                        onClick={() => handleDelete(s.supplierID)}
                       >
                         Delete
                       </button>
                       <button
                         className="btn btn-primary btn-sm"
-                        onClick={() => navigate(`/edit-customer/${cust.customerID}`)}
+                        onClick={() => navigate(`/suppliers/edit/${s.supplierID}`)}
                       >
                         Edit
                       </button>
@@ -112,10 +112,10 @@ const CustomerList: React.FC = () => {
                   </td>
                 </tr>
               ))}
-              {!loading && customers && customers.length === 0 && (
+              {!loading && suppliers && suppliers.length === 0 && (
                 <tr>
                   <td colSpan={7} className="text-center">
-                    No Customers Found
+                    No Suppliers Found
                   </td>
                 </tr>
               )}
@@ -124,7 +124,7 @@ const CustomerList: React.FC = () => {
         </div>
 
         {/* Pagination */}
-        {!loading && customers && (
+        {!loading && suppliers && (
           <div className="d-flex justify-content-between align-items-center mt-3">
             <button
               className="btn btn-secondary btn-sm"
@@ -152,4 +152,4 @@ const CustomerList: React.FC = () => {
   );
 };
 
-export default CustomerList;
+export default SupplierList;

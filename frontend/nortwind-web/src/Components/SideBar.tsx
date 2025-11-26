@@ -19,9 +19,9 @@ function SideBar() {
             </li>
 
             <li className="sidebar-item">
-              <Link className="sidebar-link" to="/employees">
+              <Link className="sidebar-link" to="/suppliers">
                 <i className="ti ti-users"></i>
-                <span className="hide-menu">Employee List</span>
+                <span className="hide-menu">Supplier List</span>
               </Link>
             </li>
 
