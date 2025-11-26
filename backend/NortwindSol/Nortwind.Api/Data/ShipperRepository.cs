@@ -157,7 +157,7 @@ FROM Shippers s";
 
         public static bool IsExists(int ShipperID)
         {
-            using (var conn = new SqlConnection(ConnectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT COUNT(1)\r\nFROM Shippers\r\nWHERE ShipperID = ShipperID;";
 
