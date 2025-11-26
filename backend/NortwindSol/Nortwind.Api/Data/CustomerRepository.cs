@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 using System.Data;
 
@@ -10,15 +11,12 @@ namespace Nortwind.Api.Data
     // -------------------
     public class CustomerRepository
     {
-        private static readonly string connectionString =
-            @"Data Source=.\SQLEXPRESS;Initial Catalog=NORTHWIND;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
-
         // -------------------
         // INSERT
         // -------------------
         public static string InsertCustomer(CreateCustomerDto dto)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -51,7 +49,7 @@ namespace Nortwind.Api.Data
         // -------------------
         public static int UpdateCustomer(string id, UpdateCustomerDto dto)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -92,7 +90,7 @@ namespace Nortwind.Api.Data
             errorMessage = null;
             try
             {
-                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
                 {
                     conn.Open();
 
@@ -135,7 +133,7 @@ namespace Nortwind.Api.Data
         public static List<CustomerListItemDto> GetAllCustomers()
         {
             var customers = new List<CustomerListItemDto>();
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -172,7 +170,7 @@ namespace Nortwind.Api.Data
         // -------------------
         public static CustomerListItemDto? GetCustomerById(string id)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = @"
@@ -207,7 +205,7 @@ namespace Nortwind.Api.Data
         // -------------------
         public static bool IsExists(string id)
         {
-            using var conn = new SqlConnection(connectionString);
+            using var conn = new SqlConnection(NorthwindDatabase.ConnectionString);
             conn.Open();
 
             string query = "SELECT COUNT(1) FROM Customers WHERE CustomerID = @CustomerID";

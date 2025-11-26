@@ -1,19 +1,18 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class EmployeeTerritoriesRepository
     {
-        public string ConnectionString = "Data Source=DESKTOP-S08JF63\\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
-
         public bool AddEmployeeTerritories(CreateEmployeeTerritoriesDto dto)
         {
             string insertquery = "INSERT INTO Employees(EmployeeID,TerritoryID)VALUES(@EmployeeID, @TerritoryID)";
 
 
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(insertquery, con))
                 {
@@ -28,7 +27,7 @@ namespace Nortwind.Api.Data
         public List<EmployeeTerritoriesListItemDto> GetEmployeeTerritories()
         {
             List<EmployeeTerritoriesListItemDto> employeesTerritories = new List<EmployeeTerritoriesListItemDto>();
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string selectquery = "select * from EmployeeTerritories";
                 using (SqlCommand cmd = new SqlCommand(selectquery, con))
@@ -51,7 +50,7 @@ namespace Nortwind.Api.Data
 
         public EmployeeTerritoriesListItemDto GetEmployeeTerritoriesId(string employeeId)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT * FROM EmployeeTerritories WHERE TerritoryID=@TerritoryID";
                 SqlCommand cmd = new SqlCommand(query, con);
@@ -73,7 +72,7 @@ namespace Nortwind.Api.Data
         }
         public void DeleteEmployeeTerritories(string TerritoryID)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 con.Open();
                 // 4. Finally delete the employee row
@@ -90,7 +89,7 @@ namespace Nortwind.Api.Data
 
         public bool UpdateEmployeeTerritories(string id, UpdateEmployeeTerritoriesDto employee)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "UPDATE EmployeeTerritories SET TerritoryID=@TerritoryID";
 

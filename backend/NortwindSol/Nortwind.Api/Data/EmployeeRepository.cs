@@ -1,19 +1,19 @@
 ﻿
 using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class EmployeeRepository
     {
-        public string ConnectionString = "Data Source=DESKTOP-S08JF63\\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
 
         public bool AddEmployee(CreateEmployeeDto dto)
         {
             string insertquery = "INSERT INTO Employees(LastName, FirstName, Title, TitleOfCourtesy, BirthDate, HireDate,Address, City, Region, PostalCode, Country, HomePhone, Extension, Notes, ReportsTo, PhotoPath)" +
                 "VALUES(@LastName, @FirstName,@Title,@TitleOfCourtesy,@BirthDate,@HireDate,@Address,@City,@Region,@PostalCode,@Country,@HomePhone,@Extension,@Notes,@ReportsTo,@PhotoPath)";
 
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 using (SqlCommand cmd = new SqlCommand(insertquery, con))
                 {
@@ -43,7 +43,7 @@ namespace Nortwind.Api.Data
         public List<EmployeesListItemDto> GetEmployee()
         {
             List<EmployeesListItemDto> employees = new List<EmployeesListItemDto>();
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string selectquery = "SELECT * FROM Employees";
                 using (SqlCommand cmd = new SqlCommand(selectquery, con))
@@ -81,7 +81,7 @@ namespace Nortwind.Api.Data
 
         public EmployeesListItemDto GetEmployeeById(int employeeId)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT * FROM Employees WHERE EmployeeID=@EmployeeID";
                 SqlCommand cmd = new SqlCommand(query, con);
@@ -117,7 +117,7 @@ namespace Nortwind.Api.Data
         }
         public void DeleteEmployee(int EmployeeID)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 con.Open();
                 // 4. Finally delete the employee row
@@ -134,7 +134,7 @@ namespace Nortwind.Api.Data
 
         public bool UpdateEmployee(int id, UpdateEmployeeDto employee)
         {
-            using (SqlConnection con = new SqlConnection(ConnectionString))
+            using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query =
     "UPDATE Employees SET " +

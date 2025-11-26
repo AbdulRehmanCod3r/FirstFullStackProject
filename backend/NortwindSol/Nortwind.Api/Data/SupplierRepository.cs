@@ -1,15 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data;
 
 public class SupplierRepository
 {
-    static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=NorthwindDb;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
-
     public static int InsertSupplier(CreateSupplierDto dto)
     {
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             string query = @"
@@ -64,7 +63,7 @@ public class SupplierRepository
 
     public static int UpdateSuppliers(int id, UpdateSupplierDto dto)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query =
                 "UPDATE Suppliers SET " +
@@ -104,7 +103,7 @@ public class SupplierRepository
 
     public static void DeleteSupplier(int SupplierId)
     {
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             string query = "DELETE FROM Suppliers WHERE SupplierId = @SupplierID";
@@ -136,7 +135,7 @@ SELECT
     s.Fax
 FROM Suppliers s";
 
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -172,7 +171,7 @@ FROM Suppliers s";
 
     public static bool IsExists(int id)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query = "SELECT COUNT(1) FROM Products WHERE SupplierID = @id";
 
@@ -189,7 +188,7 @@ FROM Suppliers s";
 
     internal static SupplierListItemDto GetSupplierById(int id)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query = @"
 SELECT 

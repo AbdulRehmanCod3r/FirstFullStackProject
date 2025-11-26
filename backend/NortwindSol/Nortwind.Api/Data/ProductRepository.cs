@@ -1,15 +1,14 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data;
 
 public class ProductRepository
 {
-    static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=NorthwindDb;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
-
     public static int InsertProduct(CreateProductDto dto)
     {
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             string query = @"
@@ -61,7 +60,7 @@ public class ProductRepository
 
     public static int UpdateProducts(int id, UpdateProductDto dto)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query =
                 "UPDATE Products SET " +
@@ -99,7 +98,7 @@ public class ProductRepository
 
     public static void DeleteProduct(int ProductId)
     {
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             string query = "DELETE FROM Products WHERE ProductId = @ProductID";
@@ -135,7 +134,7 @@ INNER JOIN Suppliers s ON p.SupplierID = s.SupplierID
 INNER JOIN Categories c ON p.CategoryID = c.CategoryID;
 ";
 
-        using (SqlConnection conn = new SqlConnection(connectionString))
+        using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             conn.Open();
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -181,7 +180,7 @@ INNER JOIN Categories c ON p.CategoryID = c.CategoryID;
 
     public static bool IsExists(int id)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query = "SELECT COUNT(1) FROM Products WHERE ProductID = @id";
 
@@ -198,7 +197,7 @@ INNER JOIN Categories c ON p.CategoryID = c.CategoryID;
 
     internal static ProductListItemDto GetProductById(int id)
     {
-        using (var conn = new SqlConnection(connectionString))
+        using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query = @"
 SELECT 

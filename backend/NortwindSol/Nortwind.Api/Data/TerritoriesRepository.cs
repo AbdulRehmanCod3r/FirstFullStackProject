@@ -1,15 +1,16 @@
 ﻿using Microsoft.Data.SqlClient;
+using Nortwind.Api.Constants;
 using Nortwind.Api.Dto;
 
 namespace Nortwind.Api.Data
 {
     public class TerritoriesRepository
     {
-        static string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=NorthwindDb;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;";
+       
 
         public static void InsertTeritory(CreateTerritoryDto dto)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 string query = @"
@@ -42,7 +43,7 @@ namespace Nortwind.Api.Data
 
         public static int UpdateTerritory(UpdateTerritoryDto dto)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query =
                     "UPDATE Territories SET " +
@@ -66,7 +67,7 @@ namespace Nortwind.Api.Data
 
         public static void DeleteTerritory(int TerritoryID)
         {
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 string query = "DELETE FROM Territories WHERE TerritoryID = @TerritoryID";
@@ -91,7 +92,7 @@ SELECT
 from Territories t
 ";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 conn.Open();
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -115,7 +116,7 @@ from Territories t
 
         public static bool IsExists(int id)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = "SELECT COUNT(1) FROM Territories WHERE TerritoryID= @id";
 
@@ -132,7 +133,7 @@ from Territories t
 
         internal static TerritoryListItemDto GetTerritoryById(int id)
         {
-            using (var conn = new SqlConnection(connectionString))
+            using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query = @"
                    SELECT 
