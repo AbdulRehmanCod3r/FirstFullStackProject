@@ -45,6 +45,12 @@ function SideBar() {
                 <span className="hide-menu">Shipper List</span>
               </Link>
             </li>
+        <li className="sidebar-item">
+              <Link className="sidebar-link" to="/regions">
+                <i className="ti ti-user"></i>
+                <span className="hide-menu">Region List</span>
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -53,3 +59,4 @@ function SideBar() {
 }
 
 export default SideBar;
+

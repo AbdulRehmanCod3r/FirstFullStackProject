@@ -17,7 +17,9 @@ import EditEmployee from "./Components/EditEmployee";
 import ShipperList from './Components/ShipperList';
 import AddShipper from './Components/AddShipper';
 import EditShipper from './Components/EditShipper';
-
+import AddRegion from './Components/AddRegion';
+import EditRegion from './Components/EditRegion';
+import RegionList from './Components/RegionList';
 function App() {
   return (
     <Router>
@@ -53,6 +55,11 @@ function App() {
               <Route path="/shippers" element={<ShipperList />} />
               <Route path="/add-shipper" element={<AddShipper />} />
               <Route path="/edit-shipper/:id" element={<EditShipper />} />
+
+              <Route path="/regions" element={<RegionList />} />
+              <Route path="/add-region" element={<AddRegion />} />
+              <Route path="/edit-region/:id" element={<EditRegion />} />
+
 
             </Routes>
           </div>
