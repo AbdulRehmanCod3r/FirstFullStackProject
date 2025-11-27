@@ -12,6 +12,8 @@ import EditCustomer from './Components/EditCustomer'
 import SupplierList from './Components/SupplierList'
 import AddSupplier from './Components/AddSupplier'
 import EditSupplier from './Components/EditSupplier'
+import AddEmployee from "./Components/AddEmployee";
+import EditEmployee from "./Components/EditEmployee";
 
 function App() {
   return (
@@ -42,6 +44,10 @@ function App() {
               <Route path="/suppliers/edit/:id" element={<EditSupplier />} />
 
               <Route path="/employees" element={<EmployeeList />} />
+              <Route path="/add-employee" element={<AddEmployee />} />
+              <Route path="/edit-employee/:id" element={<EditEmployee />} />
+
+
             </Routes>
           </div>
         </div>
