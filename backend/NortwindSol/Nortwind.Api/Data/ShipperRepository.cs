@@ -13,13 +13,12 @@ namespace Nortwind.Api.Data
             {
 
                 con.Open();
-                string query = "INSERT INTO Shippers(ShipperID,CompanyName,Phone)VALUES(@ShipperID,@CompanyName,@Phone);";
+                string query = "INSERT INTO Shippers(CompanyName,Phone)VALUES(@CompanyName,@Phone);";
 
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
 
-                    cmd.Parameters.AddWithValue("@ShipperID", dto.ShipperID);
                     cmd.Parameters.AddWithValue("@CompanyName", dto.CompanyName);
                     cmd.Parameters.AddWithValue("@Phone", dto.Phone);
                     return Convert.ToInt32(cmd.ExecuteScalar());
@@ -84,7 +83,6 @@ SELECT
     s.ShipperID,
     s.CompanyName,
     s.Phone
-    
 FROM Shippers s";
             using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
@@ -117,8 +115,9 @@ SELECT
     s.ShipperID,
     s.CompanyName,
     s.Phone
-    
-FROM Shippers s";
+FROM Shippers s
+WHERE s.ShipperID = @ShipperID;
+";
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
 

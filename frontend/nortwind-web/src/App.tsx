@@ -14,6 +14,9 @@ import AddSupplier from './Components/AddSupplier'
 import EditSupplier from './Components/EditSupplier'
 import AddEmployee from "./Components/AddEmployee";
 import EditEmployee from "./Components/EditEmployee";
+import ShipperList from './Components/ShipperList';
+import AddShipper from './Components/AddShipper';
+import EditShipper from './Components/EditShipper';
 
 function App() {
   return (
@@ -47,6 +50,9 @@ function App() {
               <Route path="/add-employee" element={<AddEmployee />} />
               <Route path="/edit-employee/:id" element={<EditEmployee />} />
 
+              <Route path="/shippers" element={<ShipperList />} />
+              <Route path="/add-shipper" element={<AddShipper />} />
+              <Route path="/edit-shipper/:id" element={<EditShipper />} />
 
             </Routes>
           </div>

@@ -38,6 +38,13 @@ function SideBar() {
                 <span className="hide-menu">Employee List</span>
               </Link>
             </li>
+
+            <li className="sidebar-item">
+              <Link className="sidebar-link" to="/shippers">
+                <i className="ti ti-user"></i>
+                <span className="hide-menu">Shipper List</span>
+              </Link>
+            </li>
           </ul>
         </nav>
       </div>
