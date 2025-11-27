@@ -40,7 +40,7 @@ const EmployeeList: React.FC = () => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
         await fetch(`https://localhost:7035/Employees/${id}`, { method: "DELETE" });
-        setEmployees(employees?.filter(emp => emp.EmployeeID  !== id) || []);
+        setEmployees(employees?.filter(emp => emp.employeeID  !== id) || []);
       } catch (err) {
         console.error(err);
         alert("Failed to delete employee. Check console.");
@@ -90,8 +90,8 @@ const EmployeeList: React.FC = () => {
             <tbody>
               {!loading &&
                 currentRecords.map(emp => (
-                  <tr key={emp.EmployeeID }>
-                    <td>{emp.EmployeeID }</td>
+                  <tr key={emp.employeeID }>
+                    <td>{emp.employeeID }</td>
                     <td>{emp.firstName ?? "-"}</td>
                     <td>{emp.lastName ?? "-"}</td>
                     <td>{emp.title ?? "-"}</td>
@@ -105,13 +105,13 @@ const EmployeeList: React.FC = () => {
                       <div className="d-flex gap-1">
                         <button
                           className="btn btn-sm btn-outline-danger"
-                          onClick={() => deleteEmployee(emp.EmployeeID )}
+                          onClick={() => deleteEmployee(emp.employeeID )}
                         >
                           Delete
                         </button>
                         <button
                           className="btn btn-primary btn-sm"
-                          onClick={() => navigate(`/edit-employee/${emp.EmployeeID }`)}
+                          onClick={() => navigate(`/edit-employee/${emp.employeeID }`)}
                         >
                           Edit
                         </button>
