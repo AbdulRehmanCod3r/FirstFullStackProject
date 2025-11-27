@@ -2,6 +2,6 @@
 {
     public static class NorthwindDatabase
     {
-        public const string ConnectionString = "NorthwindDb";
+        public static string ConnectionString = @"Data Source=DESKTOP-S08JF63\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
     }
 }
