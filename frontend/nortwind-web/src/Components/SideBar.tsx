@@ -1,9 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
+import React from "react";
 
-function SideBar() {
+interface SidebarProps {
+  sidebarOpen: boolean;
+}
+
+function SideBar({ sidebarOpen }: SidebarProps) {
   return (
-    <aside className="left-sidebar">
+    <aside className={`left-sidebar ${sidebarOpen ? "show-sidebar" : ""}`}>
       <div>
         <div className="brand-logo d-flex align-items-center justify-content-between">
           <a href="#" className="text-nowrap logo-img mt-3"></a>

@@ -1,17 +1,31 @@
 import React from 'react'
 
-function Header() {
+
+interface HeaderProps {
+    setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function Header({ setSidebarOpen }: HeaderProps) {
     return (
         <header className="app-header shadow-sm bg-white">
             <nav className="navbar navbar-expand-lg navbar-light px-3">
                 <ul className="navbar-nav">
+
                     <li className="nav-item d-block d-xl-none">
-                        <a className="nav-link sidebartoggler nav-icon-hover" id="headerCollapse" href="javascript:void(0)">
+                        
+                          <a
+                            className="nav-link sidebartoggler nav-icon-hover"
+                            href="#"
+                            onClick={(e) => {
+                                e.preventDefault();   
+                                setSidebarOpen(prev => !prev);
+                            }}
+                        >
                             <i className="ti ti-menu-2"></i>
                         </a>
                     </li>
                     <li className="nav-item">
-                        <a className="nav-link nav-icon-hover" href="javascript:void(0)">
+                        <a className="nav-link nav-icon-hover" href="#">
                             <i className="ti ti-bell-ringing"></i>
                             <div className="notification bg-primary rounded-circle"></div>
                         </a>
@@ -21,21 +35,21 @@ function Header() {
                     <ul className="navbar-nav flex-row ms-auto align-items-center justify-content-end">
                       
                         <li className="nav-item dropdown">
-                            <a className="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+                            <a className="nav-link nav-icon-hover" onClick={(e) => e.preventDefault()} id="drop2" data-bs-toggle="dropdown"
                                 aria-expanded="false">
                                 <img src="/assets/images/profile/user-1.jpg" alt="" width="35" height="35" className="rounded-circle"/>
                             </a>
                             <div className="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
                                 <div className="message-body">
-                                    <a href="javascript:void(0)" className="d-flex align-items-center gap-2 dropdown-item">
+                                    <a onClick={(e) => e.preventDefault()} className="d-flex align-items-center gap-2 dropdown-item">
                                         <i className="ti ti-user fs-6"></i>
                                         <p className="mb-0 fs-3">My Profile</p>
                                     </a>
-                                    <a href="javascript:void(0)" className="d-flex align-items-center gap-2 dropdown-item">
+                                    <a onClick={(e) => e.preventDefault()} className="d-flex align-items-center gap-2 dropdown-item">
                                         <i className="ti ti-mail fs-6"></i>
                                         <p className="mb-0 fs-3">My Account</p>
                                     </a>
-                                    <a href="javascript:void(0)" className="d-flex align-items-center gap-2 dropdown-item">
+                                    <a onClick={(e) => e.preventDefault()} className="d-flex align-items-center gap-2 dropdown-item">
                                         <i className="ti ti-list-check fs-6"></i>
                                         <p className="mb-0 fs-3">My Task</p>
                                     </a>

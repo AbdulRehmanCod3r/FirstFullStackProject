@@ -12,26 +12,39 @@ import EditCustomer from './Components/EditCustomer'
 import SupplierList from './Components/SupplierList'
 import AddSupplier from './Components/AddSupplier'
 import EditSupplier from './Components/EditSupplier'
+import { useState } from 'react'
 
 function App() {
+
+  // 👉 sidebar state added here
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   return (
     <Router>
-      <div className="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
+      <div
+        className={`page-wrapper ${sidebarOpen ? "toggled" : ""}`}
+        id="main-wrapper"
+        data-layout="vertical"
+        data-navbarbg="skin6"
+        data-sidebartype="full"
+        data-sidebar-position="fixed"
+        data-header-position="fixed"
+      >
 
         {/* Left Sidebar */}
-        <SideBar />
+        <SideBar sidebarOpen={sidebarOpen} />
 
         {/* Content Area */}
         <div className="body-wrapper">
-          <Header />
+          {/* pass toggle function */}
+          <Header setSidebarOpen={setSidebarOpen} />
+
           <div className="container-fluid">
             <Routes>
-              <Route path="/" element={<ProductList />} /> {/* Default page */}
+              <Route path="/" element={<ProductList />} />
               <Route path="/products" element={<ProductList />} />
               <Route path="/add-product" element={<AddProduct />} />
               <Route path="/products/edit/:id" element={<EditProduct />} />
-
 
               <Route path="/customers" element={<CustomerList />} />
               <Route path="/add-customer" element={<AddCustomer />} />
