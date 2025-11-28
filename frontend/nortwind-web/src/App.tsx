@@ -20,6 +20,11 @@ import EditShipper from './Components/EditShipper';
 import AddRegion from './Components/AddRegion';
 import EditRegion from './Components/EditRegion';
 import RegionList from './Components/RegionList';
+import EmployeeTerritoryList from './Components/EmployeeTerritoryList';
+import AddEmployeeTerritory from './Components/AddEmployeeTerritory';
+import EditEmployeeTerritory from './Components/EditEmployeeTerritory';
+
+
 function App() {
   return (
     <Router>
@@ -59,6 +64,13 @@ function App() {
               <Route path="/regions" element={<RegionList />} />
               <Route path="/add-region" element={<AddRegion />} />
               <Route path="/edit-region/:id" element={<EditRegion />} />
+
+              <Route path="/employee-territories" element={<EmployeeTerritoryList />} />
+              <Route path="/employee-territories/add" element={<AddEmployeeTerritory />} />
+              <Route path="/employee-territories/edit/:id" element={<EditEmployeeTerritory />} />
+
+        
+
 
 
             </Routes>
