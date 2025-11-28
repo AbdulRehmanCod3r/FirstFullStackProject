@@ -1,5 +1,5 @@
 export interface Employee {
-EmployeeID : number;
+  employeeID : number;
   lastName: string | null;
   firstName: string | null;
   title: string | null;

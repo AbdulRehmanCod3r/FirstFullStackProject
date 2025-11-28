@@ -30,7 +30,7 @@ namespace Nortwind.Api.Data
                     cmd.Parameters.AddWithValue("@Country", dto.Country);
                     cmd.Parameters.AddWithValue("@HomePhone", dto.HomePhone);
                     cmd.Parameters.AddWithValue("@Extension", dto.Extension);
-                    
+
                     cmd.Parameters.AddWithValue("@Notes", dto.Notes);
                     cmd.Parameters.AddWithValue("@ReportsTo", DBNull.Value);
                     cmd.Parameters.AddWithValue("@PhotoPath", DBNull.Value);
@@ -68,7 +68,7 @@ namespace Nortwind.Api.Data
                             Country = dr["Country"]?.ToString(),
                             HomePhone = dr["HomePhone"]?.ToString(),
                             Extension = dr["Extension"]?.ToString(),
-                            
+
                             Notes = dr["Notes"]?.ToString(),
                             ReportsTo = dr["ReportsTo"] == DBNull.Value ? null : (int?)dr["ReportsTo"],
                             PhotoPath = dr["PhotoPath"]?.ToString()
@@ -137,43 +137,60 @@ namespace Nortwind.Api.Data
             using (SqlConnection con = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query =
-    "UPDATE Employees SET " +
-    "FirstName=@FirstName, " +
-    "LastName=@LastName, " +
-    "Title=@Title, " +
-    "TitleOfCourtesy=@TitleOfCourtesy, " +
-    "BirthDate=@BirthDate, " +
-    "HireDate=@HireDate, " +
-    "Address=@Address, " +
-    "City=@City, " +
-    "Region=@Region, " +
-    "PostalCode=@PostalCode, " +
-    "Country=@Country, " +
-    "HomePhone=@HomePhone, " +
-    "Extension=@Extension, " +
-    "Notes=@Notes, " +
-    "ReportsTo=@ReportsTo, " +
-    "PhotoPath=@PhotoPath " +
-    "WHERE EmployeeID=@EmployeeID";
+                    "UPDATE Employees SET " +
+                    "FirstName=@FirstName, " +
+                    "LastName=@LastName, " +
+                    "Title=@Title, " +
+                    "TitleOfCourtesy=@TitleOfCourtesy, " +
+                    "BirthDate=@BirthDate, " +
+                    "HireDate=@HireDate, " +
+                    "Address=@Address, " +
+                    "City=@City, " +
+                    "Region=@Region, " +
+                    "PostalCode=@PostalCode, " +
+                    "Country=@Country, " +
+                    "HomePhone=@HomePhone, " +
+                    "Extension=@Extension, " +
+                    "Notes=@Notes, " +
+                    "ReportsTo=@ReportsTo, " +
+                    "PhotoPath=@PhotoPath " +
+                    "WHERE EmployeeID=@EmployeeID";
 
                 SqlCommand cmd = new SqlCommand(query, con);
+
+                // 1. Parameters where null is not expected (assuming these are non-nullable strings)
                 cmd.Parameters.AddWithValue("@FirstName", employee.FirstName);
                 cmd.Parameters.AddWithValue("@LastName", employee.LastName);
-                cmd.Parameters.AddWithValue("@Title", employee.Title);
-                cmd.Parameters.AddWithValue("@TitleOfCourtesy", employee.TitleOfCourtesy);
+
+                // 2. Parameters that are DATES (should usually be handled explicitly, but AddWithValue often works)
                 cmd.Parameters.AddWithValue("@BirthDate", employee.BirthDate);
                 cmd.Parameters.AddWithValue("@HireDate", employee.HireDate);
-                cmd.Parameters.AddWithValue("@Address", employee.Address);
-                cmd.Parameters.AddWithValue("@City", employee.City);
-                cmd.Parameters.AddWithValue("@Region", employee.Region);
-                cmd.Parameters.AddWithValue("@PostalCode", employee.PostalCode);
-                cmd.Parameters.AddWithValue("@Country", employee.Country);
-                cmd.Parameters.AddWithValue("@HomePhone", employee.HomePhone);
-                cmd.Parameters.AddWithValue("@Extension", employee.Extension);
-                cmd.Parameters.AddWithValue("@Notes", employee.Notes);
-                cmd.Parameters.AddWithValue("@ReportsTo", employee.ReportsTo);
-                cmd.Parameters.AddWithValue("@PhotoPath", employee.PhotoPath);
+
+                // 3. Parameters where NULL is possible (Use ?? DBNull.Value)
+
+                // The nullable integer that caused the original error:
+                cmd.Parameters.AddWithValue("@ReportsTo", (object)employee.ReportsTo ?? DBNull.Value);
+
+                // Other potentially nullable string/object fields:
+                cmd.Parameters.AddWithValue("@Title", (object)employee.Title ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@TitleOfCourtesy", (object)employee.TitleOfCourtesy ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Address", (object)employee.Address ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@City", (object)employee.City ?? DBNull.Value);
+
+                // NOTE: Region is nullable in Northwind
+                cmd.Parameters.AddWithValue("@Region", (object)employee.Region ?? DBNull.Value);
+
+                cmd.Parameters.AddWithValue("@PostalCode", (object)employee.PostalCode ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Country", (object)employee.Country ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@HomePhone", (object)employee.HomePhone ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Extension", (object)employee.Extension ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@Notes", (object)employee.Notes ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@PhotoPath", (object)employee.PhotoPath ?? DBNull.Value);
+
+
+                // 4. The WHERE clause parameter
                 cmd.Parameters.AddWithValue("@EmployeeID", id);
+
                 con.Open();
                 return cmd.ExecuteNonQuery() > 0;
             }
