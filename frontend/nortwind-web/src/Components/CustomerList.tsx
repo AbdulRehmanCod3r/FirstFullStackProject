@@ -34,8 +34,8 @@ const CustomerList: React.FC = () => {
     loadCustomers();
   }, []);
 
-  const deleteCustomer = async (id: number | undefined) => {
-    if (!id) return;
+  const deleteCustomer = async (id: string | number | undefined) => {
+    if (id === undefined || id === null) return;
     if (window.confirm("Are you sure you want to delete this customer?")) {
       try {
         await fetch(`https://localhost:7035/Customers/${id}`, { method: "DELETE" });

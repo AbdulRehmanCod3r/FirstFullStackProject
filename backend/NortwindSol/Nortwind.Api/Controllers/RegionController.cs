@@ -8,7 +8,7 @@ namespace Nortwind.Api.Controllers;
 [Route("[controller]")]
 public class RegionController : ControllerBase
 {
-    
+
 
     private readonly ILogger<RegionController> _logger;
 
@@ -98,5 +98,4 @@ public class RegionController : ControllerBase
 
 
 
-    
-  
+

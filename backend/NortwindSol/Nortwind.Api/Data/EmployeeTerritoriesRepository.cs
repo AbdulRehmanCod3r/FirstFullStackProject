@@ -8,7 +8,7 @@ namespace Nortwind.Api.Data
     {
         public bool AddEmployeeTerritories(CreateEmployeeTerritoriesDto dto)
         {
-            string insertquery = "INSERT INTO Employees(EmployeeID,TerritoryID)VALUES(@EmployeeID, @TerritoryID)";
+            string insertquery = "INSERT INTO EmployeeTerritories (EmployeeID, TerritoryID) VALUES (@EmployeeID, @TerritoryID)";
 
 
 
