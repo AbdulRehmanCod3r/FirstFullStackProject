@@ -41,19 +41,19 @@ namespace Nortwind.Api.Data
             }
         }
 
-        public static int UpdateTerritory(UpdateTerritoryDto dto)
+        public static int UpdateTerritory(int id, UpdateTerritoryDto dto)
         {
             using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
             {
                 string query =
                     "UPDATE Territories SET " +
-                    "TerritoryID = @TerritoryID, " + 
                     "TerritoryDescription = @TerritoryDescription, " +
-                    "RegionID = @RegionID ";
+                    "RegionID = @RegionID" + 
+                   " WHERE TerritoryID = @id";
 
                 using (var cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@TerritoryID",dto.TerritoryID);
+                    cmd.Parameters.AddWithValue("@id", id);
                     cmd.Parameters.AddWithValue("@TerritoryDescription", dto.TerritoryDescription);
                     cmd.Parameters.AddWithValue("@RegionID", dto.RegionID);
 

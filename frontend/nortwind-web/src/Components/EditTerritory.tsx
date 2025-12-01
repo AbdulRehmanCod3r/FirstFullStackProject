@@ -62,11 +62,9 @@ try {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        dto: {
           territoryDescription: territory.territoryDescription.trim(),
           regionID: territory.regionID.trim(),
-        },
-      }),
+        }),
     }
   );
 
