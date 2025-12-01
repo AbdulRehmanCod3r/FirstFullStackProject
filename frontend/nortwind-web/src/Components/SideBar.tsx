@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 
 function SideBar() {
@@ -43,6 +43,12 @@ function SideBar() {
               <Link className="sidebar-link" to="/shippers">
                 <i className="ti ti-user"></i>
                 <span className="hide-menu">Shipper List</span>
+              </Link>
+            </li>
+             <li className="sidebar-item">
+              <Link className="sidebar-link" to="/territory">
+                <i className="ti ti-user"></i>
+                <span className="hide-menu">Territory List</span>
               </Link>
             </li>
           </ul>

@@ -2,6 +2,6 @@
 {
     public static class NorthwindDatabase
     {
-        public static string ConnectionString = @"Data Source=DESKTOP-S08JF63\SQLEXPRESS01;Initial Catalog=Northwinddb2;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
+        public static string ConnectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=NORTHWIND;Integrated Security=True;Encrypt=True;Trust Server Certificate=True;";
     }
 }
