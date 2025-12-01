@@ -66,39 +66,37 @@ public class SupplierRepository
         using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
             string query =
-                "UPDATE Suppliers SET " +
-                "CompanyName = @CompanyName, " +
-                "ContactName = @ContactName, " +
-                "ContatTitle = @ContactTitle, " +
-                "Address = @Address, " +
-                "City = @City, " +
-                "Region = @Region, " +
-                "PostalCode = @PostalCode, " +
-                "Country = @Country, " +
-                "phone = @Phone " +
-                "Fax = @Fax " +
-                "WHERE SupplierID = @supplierID";
+            "UPDATE Suppliers SET " +
+            "CompanyName = @CompanyName, " +
+            "ContactName = @ContactName, " +
+            "ContactTitle = @ContactTitle, " +
+            "Address = @Address, " +
+            "City = @City, " +
+            "Region = @Region, " +
+            "PostalCode = @PostalCode, " +
+            "Country = @Country, " +
+            "Phone = @Phone, " +
+            "Fax = @Fax " +
+            "Where SupplierID = @SupplierID";
 
             using (var cmd = new SqlCommand(query, conn))
             {
-                cmd.Parameters.AddWithValue("@SupplierID", id);
-                cmd.Parameters.AddWithValue("@CompanyName", dto.CompanyName);
-                cmd.Parameters.AddWithValue("@ContactName", dto.ContactName);
-                cmd.Parameters.AddWithValue("@ContactTitle", dto.ContactTitle);
-                cmd.Parameters.AddWithValue("@Address", dto.Address);
-                cmd.Parameters.AddWithValue("@City", dto.City);
-                cmd.Parameters.AddWithValue("@Region", dto.Region);
-                cmd.Parameters.AddWithValue("@PostalCode", dto.PostalCode);
-                cmd.Parameters.AddWithValue("@Country", dto.Country);
+                cmd.Parameters.AddWithValue("@CompanyName", dto.CompanyName ?? string.Empty);
+                cmd.Parameters.AddWithValue("@contactName", dto.ContactName);
+                cmd.Parameters.AddWithValue("@ContactTitle", dto.ContactTitle ?? string.Empty);
+                cmd.Parameters.AddWithValue("@Address", dto.Address ?? string.Empty);
+                cmd.Parameters.AddWithValue("@City", dto.City ?? string.Empty);
+                cmd.Parameters.AddWithValue("@Region", dto.Region ?? string.Empty);
+                cmd.Parameters.AddWithValue("@PostalCode", dto.PostalCode ?? string.Empty);
+                cmd.Parameters.AddWithValue("@Country", dto.Country ?? string.Empty);
                 cmd.Parameters.AddWithValue("@Phone", dto.Phone);
-                cmd.Parameters.AddWithValue("@Fax", dto.Fax);
+                cmd.Parameters.AddWithValue("@Fax", dto.Fax ?? string.Empty);
+
 
                 conn.Open();
                 return cmd.ExecuteNonQuery();
             }
         }
-
-
     }
 
     public static void DeleteSupplier(int SupplierId)
@@ -127,13 +125,16 @@ SELECT
     s.ContactName,
     s.ContactTitle,
     s.Address,
-    s.CIty,
+    s.City,
     s.Region,
     s.PostalCode,
     s.Country,
     s.Phone,
     s.Fax
-FROM Suppliers s";
+    FROM Suppliers s";
+
+
+
 
         using (SqlConnection conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
@@ -145,7 +146,7 @@ FROM Suppliers s";
                 {
                     Supplier.Add(new SupplierListItemDto
                     {
-                        SupplierID = Convert.ToInt32(reader["SupplierID"]),
+                        SupplierID = reader["SupplierID"].ToString(),
                         CompanyName = reader["CompanyName"].ToString(),
                         ContactName = reader["ContactName"].ToString(),
                         ContactTitle = reader["ContactTitle"].ToString(),
@@ -173,7 +174,7 @@ FROM Suppliers s";
     {
         using (var conn = new SqlConnection(NorthwindDatabase.ConnectionString))
         {
-            string query = "SELECT COUNT(1) FROM Products WHERE SupplierID = @id";
+            string query = "SELECT COUNT(1) FROM Suppliers WHERE SupplierID = @id";
 
             using (var cmd = new SqlCommand(query, conn))
             {
@@ -197,13 +198,14 @@ SELECT
     s.ContactName,
     s.ContactTitle,
     s.Address,
-    s.CIty,
+    s.City,
     s.Region,
     s.PostalCode,
     s.Country,
     s.Phone,
     s.Fax
-FROM Suppliers s";
+FROM Suppliers s
+            Where SupplierID=@id";
 
             using (var cmd = new SqlCommand(query, conn))
             {
@@ -218,7 +220,7 @@ FROM Suppliers s";
 
                     return new SupplierListItemDto
                     {
-                        SupplierID = Convert.ToInt32(reader["SupplierID"]),
+                        SupplierID = reader["SupplierID"].ToString(),
                         CompanyName = reader["CompanyName"].ToString(),
                         ContactName = reader["ContactName"].ToString(),
                         ContactTitle = reader["ContactTitle"].ToString(),
@@ -238,4 +240,6 @@ FROM Suppliers s";
             }
         }
     }
+
+   
 }

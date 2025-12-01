@@ -44,7 +44,9 @@ namespace Nortwind.Api.Data
                 string query =
                     "UPDATE Categories SET " +
                     "CategoryName= @CategoryName, " +
-                    "Description = @Description ";
+                    "Description = @Description " +
+                    "where CategoryID = @CategoryID";
+
 
                 using (var cmd = new SqlCommand(query, conn))
                 {

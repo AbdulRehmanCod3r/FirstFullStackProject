@@ -23,14 +23,13 @@ public class SupplierController : ControllerBase
     }
 
     [HttpGet("{id}", Name = "GetSupplierById")]
-    public IActionResult GetSupplierById(int id)
+    public ActionResult<SupplierListItemDto> Get(int  id)
     {
-        if (!SupplierRepository.IsExists(id))
-        {
-            return NotFound();
-        }
+        var supplier = SupplierRepository.GetSupplierById(id);
+        if (supplier == null)
+            return NotFound(new { message = "Supplier not found." });
 
-        return Ok(SupplierRepository.GetSupplierById(id));
+        return Ok(supplier);
     }
 
     [HttpDelete("{id}", Name = "DeleteSupplier")]
@@ -53,13 +52,18 @@ public class SupplierController : ControllerBase
     }
 
     [HttpPut("{id}", Name = "UpdateSupplier")]
-    public IActionResult Update(int id, [FromBody] UpdateSupplierDto dto)
+    public IActionResult Put(int id, [FromBody] UpdateSupplierDto dto)
     {
-        if(!SupplierRepository.IsExists(id))                {
-            return NotFound();
-        }
 
-        SupplierRepository.UpdateSuppliers(id, dto);
-        return NoContent();
+        var existing = SupplierRepository.GetSupplierById(id);
+        if (existing == null)
+            return NotFound(new { message = "Supplier not found." });
+
+        int result = SupplierRepository.UpdateSuppliers(id, dto);
+
+        if (result > 0)
+            return Ok(new { message = "Supplier updated successfully." });
+
+        return BadRequest(new { message = "Update failed." });
     }
 }
