@@ -60,7 +60,7 @@ public class TerritoriesController : ControllerBase
             return NotFound();
         }
 
-        TerritoriesRepository.UpdateTerritory(dto);
+        TerritoriesRepository.UpdateTerritory(id, dto);
         return NoContent();
     }
 }
