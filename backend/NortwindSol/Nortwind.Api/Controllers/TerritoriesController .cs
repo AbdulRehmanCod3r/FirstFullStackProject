@@ -34,6 +34,7 @@ public class TerritoriesController : ControllerBase
     }
 
     [HttpDelete("{id}", Name = "DeleteTerritory")]
+   
     public IActionResult DeleteTerritory(int id)
     {
         if (!TerritoriesRepository.IsExists(id))
@@ -55,6 +56,7 @@ public class TerritoriesController : ControllerBase
     [HttpPut("{id}", Name = "UpdateTerritory")]
     public IActionResult Update(int id, [FromBody] UpdateTerritoryDto dto)
     {
+        
         if (!TerritoriesRepository.IsExists(id))
         {
             return NotFound();
