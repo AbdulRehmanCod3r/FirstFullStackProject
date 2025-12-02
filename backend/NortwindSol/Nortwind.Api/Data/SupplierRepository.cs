@@ -77,27 +77,31 @@ public class SupplierRepository
             "Country = @Country, " +
             "Phone = @Phone, " +
             "Fax = @Fax " +
-            "Where SupplierID = @SupplierID";
+            "WHERE SupplierID = @SupplierID";
 
             using (var cmd = new SqlCommand(query, conn))
             {
+                // PRIMARY KEY – only used in WHERE, NOT in SET
+                cmd.Parameters.AddWithValue("@SupplierID", id);
+
+                // FIX parameter names (correct case)
                 cmd.Parameters.AddWithValue("@CompanyName", dto.CompanyName ?? string.Empty);
-                cmd.Parameters.AddWithValue("@contactName", dto.ContactName);
+                cmd.Parameters.AddWithValue("@ContactName", dto.ContactName ?? string.Empty);
                 cmd.Parameters.AddWithValue("@ContactTitle", dto.ContactTitle ?? string.Empty);
                 cmd.Parameters.AddWithValue("@Address", dto.Address ?? string.Empty);
                 cmd.Parameters.AddWithValue("@City", dto.City ?? string.Empty);
                 cmd.Parameters.AddWithValue("@Region", dto.Region ?? string.Empty);
                 cmd.Parameters.AddWithValue("@PostalCode", dto.PostalCode ?? string.Empty);
                 cmd.Parameters.AddWithValue("@Country", dto.Country ?? string.Empty);
-                cmd.Parameters.AddWithValue("@Phone", dto.Phone);
+                cmd.Parameters.AddWithValue("@Phone", dto.Phone ?? string.Empty);
                 cmd.Parameters.AddWithValue("@Fax", dto.Fax ?? string.Empty);
-
 
                 conn.Open();
                 return cmd.ExecuteNonQuery();
             }
         }
     }
+
 
     public static void DeleteSupplier(int SupplierId)
     {
