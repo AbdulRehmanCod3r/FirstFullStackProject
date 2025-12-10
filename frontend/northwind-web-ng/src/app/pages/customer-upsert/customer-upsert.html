@@ -1,0 +1,318 @@
+<div class="container-fluid py-4">
+  <!-- Header Section -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <h1 class="page-title">
+        <i class="bi bi-person-plus"></i>
+        {{ isEditMode() ? 'Edit Customer' : 'Add New Customer' }}
+      </h1>
+    </div>
+  </div>
+
+  <!-- Success Alert -->
+  <div *ngIf="successMessage()" class="alert alert-success alert-dismissible fade show" role="alert">
+    <i class="bi bi-check-circle-fill"></i>
+    {{ successMessage() }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="successMessage.set('')"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error()" class="alert alert-danger alert-dismissible fade show" role="alert">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    {{ error() }}
+    <button
+      type="button"
+      class="btn-close"
+      (click)="error.set('')"
+      aria-label="Close"
+    ></button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="loading()" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading customer details...</p>
+  </div>
+
+  <!-- Form -->
+  <div *ngIf="!loading()" class="row">
+    <div class="col-lg-8">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Customer Information</h5>
+          </div>
+
+          <div class="card-body">
+            <!-- Row 1: Customer ID and Contact Name -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="customerID" class="form-label required">Customer ID</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('customerID')"
+                  id="customerID"
+                  formControlName="customerID"
+                  placeholder="e.g., ALFKI"
+                  [disabled]="isEditMode()"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('customerID')">
+                  {{ getFieldError('customerID') }}
+                </div>
+                <small class="form-text text-muted">3-5 characters, unique identifier</small>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="contactName" class="form-label required">Contact Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('contactName')"
+                  id="contactName"
+                  formControlName="contactName"
+                  placeholder="e.g., John Smith"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('contactName')">
+                  {{ getFieldError('contactName') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 2: Company Name and Contact Title -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="companyName" class="form-label required">Company Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('companyName')"
+                  id="companyName"
+                  formControlName="companyName"
+                  placeholder="e.g., ABC Corporation"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('companyName')">
+                  {{ getFieldError('companyName') }}
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="contactTitle" class="form-label">Contact Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('contactTitle')"
+                  id="contactTitle"
+                  formControlName="contactTitle"
+                  placeholder="e.g., Sales Manager"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('contactTitle')">
+                  {{ getFieldError('contactTitle') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 3: Address -->
+            <div class="row">
+              <div class="col-12 mb-4">
+                <label for="address" class="form-label">Address</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('address')"
+                  id="address"
+                  formControlName="address"
+                  placeholder="Street address"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('address')">
+                  {{ getFieldError('address') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 4: City, Region, Postal Code -->
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <label for="city" class="form-label">City</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('city')"
+                  id="city"
+                  formControlName="city"
+                  placeholder="e.g., New York"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('city')">
+                  {{ getFieldError('city') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="region" class="form-label">Region/State</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('region')"
+                  id="region"
+                  formControlName="region"
+                  placeholder="e.g., NY"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('region')">
+                  {{ getFieldError('region') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="postalCode" class="form-label">Postal Code</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('postalCode')"
+                  id="postalCode"
+                  formControlName="postalCode"
+                  placeholder="e.g., 10001"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('postalCode')">
+                  {{ getFieldError('postalCode') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Row 5: Country, Phone, Fax -->
+            <div class="row">
+              <div class="col-md-4 mb-4">
+                <label for="country" class="form-label">Country</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('country')"
+                  id="country"
+                  formControlName="country"
+                  placeholder="e.g., USA"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('country')">
+                  {{ getFieldError('country') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="phone" class="form-label">Phone</label>
+                <input
+                  type="tel"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('phone')"
+                  id="phone"
+                  formControlName="phone"
+                  placeholder="e.g., (555) 123-4567"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('phone')">
+                  {{ getFieldError('phone') }}
+                </div>
+              </div>
+
+              <div class="col-md-4 mb-4">
+                <label for="fax" class="form-label">Fax</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [class.is-invalid]="isFieldInvalid('fax')"
+                  id="fax"
+                  formControlName="fax"
+                  placeholder="e.g., (555) 123-4568"
+                />
+                <div class="invalid-feedback d-block" *ngIf="isFieldInvalid('fax')">
+                  {{ getFieldError('fax') }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer with Action Buttons -->
+          <div class="card-footer bg-light">
+            <div class="d-flex gap-2 justify-content-end">
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                (click)="onCancel()"
+                [disabled]="submitting()"
+              >
+                <i class="bi bi-x-circle"></i> Cancel
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="form.invalid || submitting()"
+              >
+                <span *ngIf="!submitting()">
+                  <i class="bi bi-check-circle"></i>
+                  {{ isEditMode() ? 'Update Customer' : 'Create Customer' }}
+                </span>
+                <span *ngIf="submitting()">
+                  <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                  Saving...
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sidebar: Field Requirements -->
+    <div class="col-lg-4">
+      <div class="card shadow-sm">
+        <div class="card-header bg-info text-white">
+          <h5 class="mb-0">Field Requirements</h5>
+        </div>
+        <div class="card-body">
+          <div class="requirement-item">
+            <h6 class="mb-2">
+              <i class="bi bi-info-circle text-info"></i> Required Fields
+            </h6>
+            <ul class="list-unstyled small">
+              <li><i class="bi bi-check text-success"></i> Customer ID</li>
+              <li><i class="bi bi-check text-success"></i> Contact Name</li>
+              <li><i class="bi bi-check text-success"></i> Company Name</li>
+            </ul>
+          </div>
+
+          <hr />
+
+          <div class="requirement-item">
+            <h6 class="mb-2">
+              <i class="bi bi-info-circle text-info"></i> Constraints
+            </h6>
+            <ul class="list-unstyled small">
+              <li><strong>Customer ID:</strong> 3-5 characters (unique)</li>
+              <li><strong>Contact Name:</strong> 2-100 characters</li>
+              <li><strong>Company Name:</strong> 2-100 characters</li>
+              <li><strong>Contact Title:</strong> Max 50 characters</li>
+              <li><strong>Address:</strong> Max 200 characters</li>
+              <li><strong>Phone/Fax:</strong> Max 20 characters</li>
+            </ul>
+          </div>
+
+          <hr />
+
+          <div class="requirement-item">
+            <h6 class="mb-2">
+              <i class="bi bi-lightbulb text-warning"></i> Tips
+            </h6>
+            <ul class="list-unstyled small">
+              <li>✓ Customer ID cannot be changed after creation</li>
+              <li>✓ All required fields must be filled</li>
+              <li>✓ Optional fields can be left empty</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

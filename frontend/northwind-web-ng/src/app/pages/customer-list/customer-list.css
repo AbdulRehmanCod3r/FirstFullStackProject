@@ -1,0 +1,153 @@
+/* Customer List Styles */
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0;
+  padding-bottom: 1rem;
+  border-bottom: 3px solid #007bff;
+}
+
+/* Table Styles */
+.table {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+.table thead {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.table thead th {
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1rem 0.75rem;
+  border: none;
+}
+
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.table tbody td {
+  vertical-align: middle;
+  padding: 1rem 0.75rem;
+}
+
+/* Badge Styles */
+.badge {
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 0.75rem;
+  letter-spacing: 0.5px;
+}
+
+/* Button Styles */
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-sm:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+}
+
+.btn-info:hover {
+  background-color: #138496;
+  border-color: #117a8b;
+}
+
+/* Search Input */
+.input-group-text {
+  border-color: #dee2e6;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Alert Styles */
+.alert {
+  border-left: 4px solid;
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.alert-danger {
+  border-left-color: #dc3545;
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.alert-info {
+  border-left-color: #17a2b8;
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+/* Loading Spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.4em;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .btn-sm {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+
+  .text-end {
+    text-align: left !important;
+    margin-top: 1rem;
+  }
+}
+
+/* Sticky Header */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Empty State */
+.alert-info.text-center {
+  background: linear-gradient(135deg, #e7f3ff 0%, #f0f8ff 100%);
+  border: 2px dashed #17a2b8;
+  border-left: 4px solid #17a2b8;
+}
+
+.alert-info.text-center i {
+  color: #17a2b8;
+}
