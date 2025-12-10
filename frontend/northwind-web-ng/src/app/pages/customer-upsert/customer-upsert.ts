@@ -31,10 +31,23 @@ export class CustomerUpsert implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      if (params['id']) {
+      const idParam = params['id'];
+
+      // If route param is exactly '0' (or numeric 0) -> Add mode
+      // If route param is a number > 0 -> Edit mode and load customer
+      const idNum = Number(idParam);
+      if (!isNaN(idNum) && idNum > 0) {
         this.isEditMode.set(true);
-        this.customerId.set(params['id']);
-        this.loadCustomer(params['id']);
+        this.customerId.set(idParam);
+        this.loadCustomer(idParam);
+      } else {
+        // Add mode: ensure customerID control is enabled for user input
+        this.isEditMode.set(false);
+        this.customerId.set(null);
+        const ctrl = this.form.get('customerID');
+        if (ctrl && ctrl.disabled) {
+          ctrl.enable({ emitEvent: false });
+        }
       }
     });
   }

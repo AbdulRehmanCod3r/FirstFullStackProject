@@ -56,11 +56,13 @@ export class CustomerList implements OnInit {
   }
 
   addCustomer(): void {
-    this.router.navigate(['/customers/add']);
+    // Navigate to the unified route; '0' indicates Add mode per app convention
+    this.router.navigate(['/customers', '0']);
   }
 
   editCustomer(customerId: string): void {
-    this.router.navigate(['/customers/edit', customerId]);
+    // Use the single route pattern: customers/:id
+    this.router.navigate(['/customers', customerId]);
   }
 
   viewCustomer(customerId: string): void {
